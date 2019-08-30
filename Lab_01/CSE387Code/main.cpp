@@ -1,12 +1,101 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include "MathLibsConstsFuncs.h"
+
+// Variable to hold the integer identifier for the shader program
+GLuint shaderProgram;
+
+// Variable to hold the integer identifier for the vertex array object
+GLuint vertexArrayObject;
+
+GLFWwindow* mWindow;
 
 void window_close_callback(GLFWwindow* window) {
 	// Destroy the window
 	glfwDestroyWindow(window);
 }
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, GL_TRUE);
+	else if (action == GLFW_PRESS)
+		cout << "Key pressed" << endl;
+}
+
+void error_callback(int error, const char* description)
+{
+	fprintf(stderr, "Error: %s\n", description);
+}
+
+/**
+Function: Displays OpengGL and GLSL version information.
+*/
+void displayOpenGlInfo(void)
+{
+	// Display the company responsible for this GL implementation
+	fprintf(stdout, "OpenGL INFO:\n\tOpenGL Implementor: %s\n",
+		glGetString(GL_VENDOR));
+	// Display the renderer/graphics card
+	fprintf(stdout, "\tRenderer: %s\n", glGetString(GL_RENDERER));
+	// Display the OpenGL version that is implemented
+	fprintf(stdout, "\tOpenGL Version: %s\n", glGetString(GL_VERSION));
+	// Display the GLSL version
+	fprintf(stdout, "\tGLSL Version: %s\n\n",
+		glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+} // end displayOpenGlInfo
+
+/**
+* Initialize OpenGL. Builds a shader program and creates a vertex
+* array object.
+*/
+void initialize()
+{
+	// Display OpenGL context information on the command console.
+	displayOpenGlInfo();
+
+	// Turn on depth testing
+	glEnable(GL_DEPTH_TEST);
+
+	// Set the clear color
+	glClearColor(0.0, 0.0, 0.0, 1.0);
+
+	// Build shader program
+	//TODO
+
+	//Generate vertex array object and bind it for the first time
+	//TODO
+
+} // end initialize
+
+/**
+* Acts as the display function for the window. It is called every
+* the window needs to be repainted.
+*/
+static void render_scene_callback()
+{
+	// clear the both the color and depth buffers
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Bind vertex array object
+	//TODO
+
+	// Use the shader program
+	//TODO
+
+	// Fetch input data for pipeline	
+	glDrawArrays(GL_TRIANGLES, 0, 3);
+
+	// flush all drawing commands and swap the front and back buffers
+	glfwSwapBuffers(mWindow);
+
+} // end RenderSceneCB
 
 int main(int argc, char** argv)
 {
@@ -17,14 +106,14 @@ int main(int argc, char** argv)
 
 	// Use the core OpenGL profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	int mScreenWidth = 500;
-	int mScreenHeight = 300;
+	int mScreenWidth = 1024;
+	int mScreenHeight = 768;
 
 	// Create rendering window and the OpenGL context.
-	GLFWwindow* mWindow = glfwCreateWindow(mScreenWidth, mScreenHeight, "My First Window", NULL, NULL);
+	mWindow = glfwCreateWindow(mScreenWidth, mScreenHeight, "My First Window - Logan Petruziello", NULL, NULL);
 	if (!mWindow) {
 		glfwTerminate();
 		exit(EXIT_FAILURE);
@@ -41,17 +130,23 @@ int main(int argc, char** argv)
 	// On some platforms, GLEW will emit a benign error code. So clear it.
 	glGetError();
 
+	// Ain't No Callaback Girl
 	glfwSetWindowCloseCallback(mWindow, window_close_callback);
+	glfwSetFramebufferSizeCallback(mWindow, framebuffer_size_callback);
+	glfwSetKeyCallback(mWindow, key_callback);
+	glfwSetErrorCallback(error_callback);
+
+	glClearColor(0.3f, 0.0f, 0.0f, 1.0f);
 
 	// Load vertex and texture data
 	while (!glfwWindowShouldClose(mWindow)) {
 		// Clear the color and depth buffers
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // TODO: replace this
 
 		// Render Meshes
 		// TODO
 		// Swap the front and back buffers
-		glfwSwapBuffers(mWindow);
+		glfwSwapBuffers(mWindow); // TODO: repalce this
 
 		// Processes events that are already in the event queue by 
 		// calling registered window and input callback functions 
@@ -63,3 +158,4 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+
