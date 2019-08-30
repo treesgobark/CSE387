@@ -64,7 +64,7 @@ void initialize()
 	glEnable(GL_DEPTH_TEST);
 
 	// Set the clear color
-	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glClearColor(0.3f, 0.0, 0.0, 1.0);
 
 	// Build shader program
 	//TODO
@@ -136,7 +136,7 @@ int main(int argc, char** argv)
 	glfwSetKeyCallback(mWindow, key_callback);
 	glfwSetErrorCallback(error_callback);
 
-	glClearColor(0.3f, 0.0f, 0.0f, 1.0f);
+	initialize();
 
 	// Load vertex and texture data
 	while (!glfwWindowShouldClose(mWindow)) {
@@ -147,6 +147,8 @@ int main(int argc, char** argv)
 		// TODO
 		// Swap the front and back buffers
 		glfwSwapBuffers(mWindow); // TODO: repalce this
+
+		render_scene_callback();
 
 		// Processes events that are already in the event queue by 
 		// calling registered window and input callback functions 
