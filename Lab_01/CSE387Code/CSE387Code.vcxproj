@@ -153,9 +153,11 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Downloads\ReadShader.h" />
     <ClInclude Include="MathLibsConstsFuncs.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Downloads\ReadShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathLibsConstsFuncs.cpp" />
   </ItemGroup>
