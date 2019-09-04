@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "MathLibsConstsFuncs.h"
+#include "ReadShader.h"
 
 // Variable to hold the integer identifier for the shader program
 GLuint shaderProgram;
@@ -67,10 +68,49 @@ void initialize()
 	glClearColor(0.3f, 0.0, 0.0, 1.0);
 
 	// Build shader program
-	//TODO
+	shaderProgram = glCreateProgram();
+	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	const GLchar* vertSource = ReadShader("Shaders/vertexShader.glsl");
+	const GLchar* fragSource = ReadShader("Shaders/fragmentShader.glsl");
+	glShaderSource(vertexShader, 1, &vertSource, NULL);
+	glShaderSource(fragmentShader, 1, &fragSource, NULL);
+
+	GLint compiled;
+	glCompileShader(vertexShader);
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		GLsizei len; glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &len);
+		GLchar* log = new GLchar[len + 1]; glGetShaderInfoLog(vertexShader, len, &len, log);
+		std::cerr << "Shader compilation failed: " << log << std::endl; delete[] log;
+	}
+
+	glCompileShader(fragmentShader);
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &compiled);
+	if (!compiled) {
+		GLsizei len; glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &len);
+		GLchar* log = new GLchar[len + 1]; glGetShaderInfoLog(fragmentShader, len, &len, log);
+		std::cerr << "Shader compilation failed: " << log << std::endl; delete[] log;
+	}
+
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+
+	glLinkProgram(shaderProgram);
+	GLint linked;
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &linked);
+	if (!linked) {
+		GLsizei len; glGetProgramiv(shaderProgram, GL_INFO_LOG_LENGTH, &len);
+		GLchar* log = new GLchar[len + 1];
+		glGetProgramInfoLog(shaderProgram, len, &len, log);
+		std::cerr << "Shader linking failed: " << log << std::endl;
+		delete[] log;
+	}
 
 	//Generate vertex array object and bind it for the first time
-	//TODO
+	glGenVertexArrays(1, &vertexArrayObject);
+	glBindVertexArray(vertexArrayObject);
 
 } // end initialize
 
@@ -84,10 +124,10 @@ static void render_scene_callback()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Bind vertex array object
-	//TODO
+	//glBindVertexArray(vertexArrayObject);
 
 	// Use the shader program
-	//TODO
+	glUseProgram(shaderProgram);
 
 	// Fetch input data for pipeline	
 	glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -140,20 +180,15 @@ int main(int argc, char** argv)
 
 	// Load vertex and texture data
 	while (!glfwWindowShouldClose(mWindow)) {
-		// Clear the color and depth buffers
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // TODO: replace this
-
-		// Render Meshes
-		// TODO
-		// Swap the front and back buffers
-		glfwSwapBuffers(mWindow); // TODO: repalce this
-
 		render_scene_callback();
 
 		// Processes events that are already in the event queue by 
 		// calling registered window and input callback functions 
 		glfwPollEvents();
 	}
+
+	glDeleteShader(shaderProgram);
+	glDeleteVertexArrays(1, &vertexArrayObject);
 
 	// Frees other allocated resources
 	glfwTerminate();
