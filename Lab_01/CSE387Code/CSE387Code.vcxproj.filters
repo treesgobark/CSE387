@@ -16,9 +16,17 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Shaders\fragmentShader.glsl" />
+    <None Include="Shaders\vertexShader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathLibsConstsFuncs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -27,6 +35,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MathLibsConstsFuncs.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
