@@ -1,12 +1,15 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "MathLibsConstsFuncs.h"
+#include "BuildShaderProgram.h"
 
 // Variable to hold the integer identifier for the shader program
 GLuint shaderProgram;
 
 // Variable to hold the integer identifier for the vertex array object
-GLuint vertexArrayObject;
+GLuint vertexArrayObjects[3];
+
+GLuint mode = 1;
 
 GLFWwindow* mWindow;
 
@@ -22,10 +25,22 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	else if (action == GLFW_PRESS)
-		cout << "Key pressed" << endl;
+	if (action == GLFW_PRESS) {
+		switch (key) {
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GL_TRUE);
+			break;
+		case GLFW_KEY_1:
+			mode = 1;
+			break;
+		case GLFW_KEY_2:
+			mode = 2;
+			break;
+		case GLFW_KEY_3:
+			mode = 3;
+			break;
+		}
+	}
 }
 
 void error_callback(int error, const char* description)
@@ -65,10 +80,18 @@ void initialize()
 
 	// Set the clear color
 	glClearColor(0.3f, 0.0, 0.0, 1.0);
+	
+	// Build shader program
+	ShaderInfo shaders[] = {
+		{ GL_VERTEX_SHADER, "Shaders/vertexShader.vs.glsl" },
+		{ GL_FRAGMENT_SHADER, "Shaders/fragmentShader.fs.glsl" },
+		{ GL_NONE, NULL } // signals that there are no more shaders 
+	};
+	
+	shaderProgram = BuildShaderProgram(shaders);
 
 	//Generate vertex array object and bind it for the first time
-	glGenVertexArrays(1, &vertexArrayObject);
-	glBindVertexArray(vertexArrayObject);
+	glGenVertexArrays(3, vertexArrayObjects);
 
 } // end initialize
 
@@ -82,13 +105,20 @@ static void render_scene_callback()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Bind vertex array object
-	//glBindVertexArray(vertexArrayObject);
+	glBindVertexArray(vertexArrayObjects[mode-1]);
 
 	// Use the shader program
 	glUseProgram(shaderProgram);
 
 	// Fetch input data for pipeline	
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	switch (mode) {
+	case 1: glDrawArrays(GL_TRIANGLES, 0, 3);
+		break;
+	case 2: glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+		break;
+	case 3: glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+		break;
+	}
 
 	// flush all drawing commands and swap the front and back buffers
 	glfwSwapBuffers(mWindow);
@@ -146,7 +176,7 @@ int main(int argc, char** argv)
 	}
 
 	glDeleteShader(shaderProgram);
-	glDeleteVertexArrays(1, &vertexArrayObject);
+	glDeleteVertexArrays(3, vertexArrayObjects);
 
 	// Frees other allocated resources
 	glfwTerminate();

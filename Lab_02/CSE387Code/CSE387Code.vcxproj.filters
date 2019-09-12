@@ -21,6 +21,8 @@
     <None Include="Shaders\geometryShader.gs.glsl" />
     <None Include="Shaders\tessellationControlShader.tcs.glsl" />
     <None Include="Shaders\tessellationEvaluationShader.tes.glsl" />
+    <None Include="Shaders\vertexShader.vs.glsl" />
+    <None Include="Shaders\fragmentShader.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathLibsConstsFuncs.h">
