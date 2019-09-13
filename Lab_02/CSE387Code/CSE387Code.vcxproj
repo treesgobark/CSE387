@@ -152,10 +152,12 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="Shaders\fragmentShader.glsl" />
+    <None Include="Shaders\fragmentShader.fs.glsl" />
     <None Include="Shaders\geometryShader.gs.glsl" />
     <None Include="Shaders\tessellationControlShader.tcs.glsl" />
     <None Include="Shaders\tessellationEvaluationShader.tes.glsl" />
     <None Include="Shaders\vertexShader.glsl" />
+    <None Include="Shaders\vertexShader.vs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildShaderProgram.h" />
