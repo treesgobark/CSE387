@@ -135,6 +135,14 @@ void initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[0]);
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data1), g_vertex_buffer_data1, GL_STATIC_DRAW);
+	// The following commands will talk about our 'vertexbuffer' buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[1]);
+	// Give our vertices to OpenGL.
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data2), g_vertex_buffer_data2, GL_STATIC_DRAW);
+	// The following commands will talk about our 'vertexbuffer' buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[2]);
+	// Give our vertices to OpenGL.
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data3), g_vertex_buffer_data3, GL_STATIC_DRAW);
 
 } // end initialize
 
@@ -169,7 +177,7 @@ static void render_scene_callback()
 	switch (mode) {
 	case 1: glDrawArrays(GL_TRIANGLES, 0, 9);
 		break;
-	case 2: glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
+	case 2: glDrawArrays(GL_TRIANGLE_STRIP, 0, 10);
 		break;
 	case 3: glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
 		break;
