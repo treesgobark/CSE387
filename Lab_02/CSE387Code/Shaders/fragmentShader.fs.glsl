@@ -9,5 +9,4 @@ out vec4 fragmentColor;
 void main()
 {
 	fragmentColor = vertexColor;
-
 }

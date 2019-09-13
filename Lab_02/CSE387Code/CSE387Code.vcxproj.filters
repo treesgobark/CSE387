@@ -16,8 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Shaders\fragmentShader.glsl" />
-    <None Include="Shaders\vertexShader.glsl" />
     <None Include="Shaders\geometryShader.gs.glsl" />
     <None Include="Shaders\tessellationControlShader.tcs.glsl" />
     <None Include="Shaders\tessellationEvaluationShader.tes.glsl" />

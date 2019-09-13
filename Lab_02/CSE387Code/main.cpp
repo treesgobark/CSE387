@@ -13,6 +13,9 @@ GLuint mode = 1;
 
 GLFWwindow* mWindow;
 
+// This will identify our vertex buffer
+GLuint vertexbuffers[3];
+
 void window_close_callback(GLFWwindow* window) {
 	// Destroy the window
 	glfwDestroyWindow(window);
@@ -93,6 +96,46 @@ void initialize()
 	//Generate vertex array object and bind it for the first time
 	glGenVertexArrays(3, vertexArrayObjects);
 
+	// An array of 3 vectors which represents 3 vertices
+	static const GLfloat g_vertex_buffer_data1[] = {
+	   -0.7f,  0.0f,  0.0f,
+	   -0.5f,  0.5f,  0.0f,
+	   -0.3f,  0.0f,  0.0f,
+	    0.3f,  0.0f,  0.0f,
+	    0.5f,  0.5f,  0.0f,
+	    0.7f,  0.0f,  0.0f,
+	   -0.2f,  0.0f,  0.0f,
+	    0.0f, -0.5f,  0.0f,
+	    0.2f,  0.0f,  0.0f,
+	};
+
+	static const GLfloat g_vertex_buffer_data2[] = {
+		-0.75f,  0.5f,  0.0f,
+		 -0.5f,  0.5f,  0.0f,
+		-0.75f,  0.5f,  0.0f,
+		  0.5f,  0.5f,  0.0f,
+	 	 0.75f,  0.5f,  0.0f,
+		-0.75f, -0.5f,  0.0f,
+		 -0.5f, -0.5f,  0.0f,
+		-0.75f, -0.5f,  0.0f,
+		  0.5f, -0.5f,  0.0f,
+		 0.75f, -0.5f,  0.0f,
+	};
+
+	static const GLfloat g_vertex_buffer_data3[] = {
+		-0.75f,   0.0f,  0.0f,
+		  0.0f, -0.75f,  0.0f,
+		 0.75f,   0.0f,  0.0f,
+		  0.0f,  0.75f,  0.0f,
+	};
+
+	// Generate 3 buffers, put the resulting identifier in vertexbuffer
+	glGenBuffers(3, vertexbuffers);
+	// The following commands will talk about our 'vertexbuffer' buffer
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[0]);
+	// Give our vertices to OpenGL.
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data1), g_vertex_buffer_data1, GL_STATIC_DRAW);
+
 } // end initialize
 
 /**
@@ -104,6 +147,18 @@ static void render_scene_callback()
 	// clear the both the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	// 1st attribute buffer : vertices
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[mode-1]);
+	glVertexAttribPointer(
+		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
+		3,                  // size
+		GL_FLOAT,           // type
+		GL_FALSE,           // normalized?
+		0,                  // stride
+		(void*)0            // array buffer offset
+	);
+
 	// Bind vertex array object
 	glBindVertexArray(vertexArrayObjects[mode-1]);
 
@@ -112,13 +167,14 @@ static void render_scene_callback()
 
 	// Fetch input data for pipeline	
 	switch (mode) {
-	case 1: glDrawArrays(GL_TRIANGLES, 0, 3);
+	case 1: glDrawArrays(GL_TRIANGLES, 0, 9);
 		break;
 	case 2: glDrawArrays(GL_TRIANGLE_STRIP, 0, 3);
 		break;
 	case 3: glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
 		break;
 	}
+	glDisableVertexAttribArray(0);
 
 	// flush all drawing commands and swap the front and back buffers
 	glfwSwapBuffers(mWindow);
