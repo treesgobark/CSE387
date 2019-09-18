@@ -1,5 +1,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "FigureOne.h"
 #include "MathLibsConstsFuncs.h"
 #include "BuildShaderProgram.h"
 
@@ -15,6 +16,8 @@ GLFWwindow* mWindow;
 
 // This will identify our vertex buffer
 GLuint vertexbuffers[3];
+
+FigureOne figureOne;
 
 void window_close_callback(GLFWwindow* window) {
 	// Destroy the window
@@ -93,56 +96,7 @@ void initialize()
 	
 	shaderProgram = BuildShaderProgram(shaders);
 
-	//Generate vertex array object and bind it for the first time
-	glGenVertexArrays(3, vertexArrayObjects);
-
-	// An array of 3 vectors which represents 3 vertices
-	static const GLfloat g_vertex_buffer_data1[] = {
-	   -0.7f,  0.0f,  0.0f,
-	   -0.5f,  0.5f,  0.0f,
-	   -0.3f,  0.0f,  0.0f,
-	    0.3f,  0.0f,  0.0f,
-	    0.5f,  0.5f,  0.0f,
-	    0.7f,  0.0f,  0.0f,
-	   -0.2f,  0.0f,  0.0f,
-	    0.0f, -0.5f,  0.0f,
-	    0.2f,  0.0f,  0.0f,
-	};
-
-	static const GLfloat g_vertex_buffer_data2[] = {
-		-0.75f,  0.5f,  0.0f,
-		 -0.5f,  0.5f,  0.0f,
-		-0.75f,  0.5f,  0.0f,
-		  0.5f,  0.5f,  0.0f,
-	 	 0.75f,  0.5f,  0.0f,
-		-0.75f, -0.5f,  0.0f,
-		 -0.5f, -0.5f,  0.0f,
-		-0.75f, -0.5f,  0.0f,
-		  0.5f, -0.5f,  0.0f,
-		 0.75f, -0.5f,  0.0f,
-	};
-
-	static const GLfloat g_vertex_buffer_data3[] = {
-		-0.75f,   0.0f,  0.0f,
-		  0.0f, -0.75f,  0.0f,
-		 0.75f,   0.0f,  0.0f,
-		  0.0f,  0.75f,  0.0f,
-	};
-
-	// Generate 3 buffers, put the resulting identifier in vertexbuffer
-	glGenBuffers(3, vertexbuffers);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[0]);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data1), g_vertex_buffer_data1, GL_STATIC_DRAW);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[1]);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data2), g_vertex_buffer_data2, GL_STATIC_DRAW);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[2]);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data3), g_vertex_buffer_data3, GL_STATIC_DRAW);
+	figureOne.initialize(shaderProgram);
 
 } // end initialize
 
@@ -157,29 +111,14 @@ static void render_scene_callback()
 
 	// 1st attribute buffer : vertices
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[mode-1]);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
-
-	// Bind vertex array object
-	glBindVertexArray(vertexArrayObjects[mode-1]);
-
-	// Use the shader program
-	glUseProgram(shaderProgram);
 
 	// Fetch input data for pipeline	
 	switch (mode) {
-	case 1: glDrawArrays(GL_TRIANGLES, 0, 9);
+	case 1: figureOne.draw();
 		break;
-	case 2: glDrawArrays(GL_TRIANGLE_STRIP, 0, 10);
+	case 2: 
 		break;
-	case 3: glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+	case 3: 
 		break;
 	}
 	glDisableVertexAttribArray(0);
