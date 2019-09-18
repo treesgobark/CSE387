@@ -159,13 +159,17 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildShaderProgram.h" />
+    <ClInclude Include="FigureOne.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MathLibsConstsFuncs.h" />
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BuildShaderProgram.cpp" />
+    <ClCompile Include="FigureOne.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathLibsConstsFuncs.cpp" />
+    <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
