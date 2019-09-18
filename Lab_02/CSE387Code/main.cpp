@@ -7,7 +7,7 @@
 GLuint shaderProgram;
 
 // Variable to hold the integer identifier for the vertex array object
-GLuint vertexArrayObjects[3];
+GLuint vertexArrayObject;
 
 GLuint mode = 1;
 
@@ -94,7 +94,8 @@ void initialize()
 	shaderProgram = BuildShaderProgram(shaders);
 
 	//Generate vertex array object and bind it for the first time
-	glGenVertexArrays(3, vertexArrayObjects);
+	glGenVertexArrays(1, &vertexArrayObject);
+	glBindVertexArray(vertexArrayObject);
 
 	// An array of 3 vectors which represents 3 vertices
 	static const GLfloat g_vertex_buffer_data1[] = {
@@ -144,6 +145,8 @@ void initialize()
 	// Give our vertices to OpenGL.
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data3), g_vertex_buffer_data3, GL_STATIC_DRAW);
 
+	glEnableVertexAttribArray(0);
+
 } // end initialize
 
 /**
@@ -168,7 +171,7 @@ static void render_scene_callback()
 	);
 
 	// Bind vertex array object
-	glBindVertexArray(vertexArrayObjects[mode-1]);
+	// glBindVertexArray(vertexArrayObject);
 
 	// Use the shader program
 	glUseProgram(shaderProgram);
@@ -240,7 +243,7 @@ int main(int argc, char** argv)
 	}
 
 	glDeleteShader(shaderProgram);
-	glDeleteVertexArrays(3, vertexArrayObjects);
+	glDeleteVertexArrays(1, &vertexArrayObject);
 
 	// Frees other allocated resources
 	glfwTerminate();
