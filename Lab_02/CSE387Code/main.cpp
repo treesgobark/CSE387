@@ -93,6 +93,8 @@ void initialize()
 	
 	shaderProgram = BuildShaderProgram(shaders);
 
+	string textureFileName = "fileName";
+
 	//Generate vertex array object and bind it for the first time
 	glGenVertexArrays(1, &vertexArrayObject);
 	glBindVertexArray(vertexArrayObject);
