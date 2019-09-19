@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "FigureOne.h"
+#include "FigureTwo.h"
 #include "MathLibsConstsFuncs.h"
 #include "BuildShaderProgram.h"
 
@@ -17,7 +18,14 @@ GLFWwindow* mWindow;
 // This will identify our vertex buffer
 GLuint vertexbuffers[3];
 
+float rotationX = 0.3f;
+float rotationY = 0.5f;
+float rotationZ = 0.7f;
+
 FigureOne figureOne;
+FigureTwo figureTwo;
+FigureTwo cube1;
+FigureTwo cube2;
 
 void window_close_callback(GLFWwindow* window) {
 	// Destroy the window
@@ -100,6 +108,9 @@ void initialize()
 	shaderProgram = BuildShaderProgram(shaders);
 
 	figureOne.initialize(shaderProgram);
+	figureTwo.initialize(shaderProgram);
+	cube1.initialize(shaderProgram);
+	cube2.initialize(shaderProgram);
 
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
@@ -124,11 +135,15 @@ static void render_scene_callback()
 
 	// Fetch input data for pipeline	
 	switch (mode) {
-	case 1: figureOne.draw();
+	case 1:
+		figureOne.draw();
 		break;
-	case 2: 
+	case 2:
+		figureTwo.draw();
 		break;
-	case 3: 
+	case 3:
+		cube1.draw();
+		cube2.draw();
 		break;
 	}
 	glDisableVertexAttribArray(0);
@@ -139,9 +154,33 @@ static void render_scene_callback()
 } // end RenderSceneCB
 
 void update() {
-	figureOne.modelMatrix = figureOne.modelMatrix *
-		glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
-	cout << figureOne.modelMatrix << endl;
+	switch (mode) {
+	case 1:
+		figureOne.modelMatrix = figureOne.modelMatrix *
+			glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
+		break;
+	case 2:
+		rotationX += 0.02f;
+		rotationY += 0.03f;
+		rotationZ += 0.05f;
+		figureTwo.modelMatrix = figureTwo.modelMatrix *
+			glm::rotate(glm::radians(sin(rotationX/2)), vec3(1, 0, 0)) *
+			glm::rotate(glm::radians(sin(rotationY/2)), vec3(0, 1, 0)) *
+			glm::rotate(glm::radians(sin(rotationZ/2)), vec3(0, 0, 1));
+		//figureOne.modelMatrix = figureOne.modelMatrix *
+		//	glm::rotate(glm::radians(1.0f), vec3(0, 1, 0));
+		break;
+	case 3: 
+		cube1.modelMatrix = cube1.modelMatrix *
+			glm::translate(mat4(), vec3(0.01f, 0.0f, 0.0f)) *
+			glm::rotate(glm::radians(1.0f), vec3(0, 1, 0));
+		cube2.modelMatrix = cube2.modelMatrix *
+			glm::translate(mat4(), vec3(-0.01f, 0.0f, 0.0f)) *
+			glm::rotate(glm::radians(1.0f), vec3(0, -1, 0));
+		//figureOne.modelMatrix = figureOne.modelMatrix *
+		//	glm::rotate(glm::radians(1.0f), vec3(1, 0, 0));
+		break;
+	}
 }
 
 int main(int argc, char** argv)
@@ -150,9 +189,6 @@ int main(int argc, char** argv)
 	if (!glfwInit()) {
 		exit(EXIT_FAILURE);
 	}
-	// Set the swap interval for the OpenGL context i.e. the number of screen
-	// updates to wait between before swapping the buffer and returning.
-	glfwSwapInterval(1);
 
 	// Use the core OpenGL profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -170,6 +206,10 @@ int main(int argc, char** argv)
 	}
 
 	glfwMakeContextCurrent(mWindow);
+
+	// Set the swap interval for the OpenGL context i.e. the number of screen
+	// updates to wait between before swapping the buffer and returning.
+	glfwSwapInterval(1);
 
 	// Prevent possible initialization error when using the core context
 	glewExperimental = GL_TRUE; GLenum res = glewInit(); // Must be done after glut is initialized!
