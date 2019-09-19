@@ -27,6 +27,8 @@ void window_close_callback(GLFWwindow* window) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	mat4 projectionTransform = glm::perspective(glm::radians(45.0f), (float)width / (float)height, .5f , 100.0f);
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projectionTransform));
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -78,6 +80,7 @@ void displayOpenGlInfo(void)
 */
 void initialize()
 {
+	cout << "big kek" << endl;
 	// Display OpenGL context information on the command console.
 	displayOpenGlInfo();
 
@@ -98,6 +101,10 @@ void initialize()
 
 	figureOne.initialize(shaderProgram);
 
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
+	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
+
+
 } // end initialize
 
 /**
@@ -108,6 +115,10 @@ static void render_scene_callback()
 {
 	// clear the both the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	mat4 viewTransform = glm::lookAt(vec3(0.0f, 0.0f, -3.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(viewTransform));
+	//cout << viewTransform << endl;
 
 	// 1st attribute buffer : vertices
 	glEnableVertexAttribArray(0);
@@ -128,12 +139,19 @@ static void render_scene_callback()
 
 } // end RenderSceneCB
 
+void update() {
+
+}
+
 int main(int argc, char** argv)
 {
 	glfwInit();
 	if (!glfwInit()) {
 		exit(EXIT_FAILURE);
 	}
+	// Set the swap interval for the OpenGL context i.e. the number of screen
+	// updates to wait between before swapping the buffer and returning.
+	glfwSwapInterval(1);
 
 	// Use the core OpenGL profile
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -168,6 +186,9 @@ int main(int argc, char** argv)
 	glfwSetErrorCallback(error_callback);
 
 	initialize();
+
+	mat4 projectionTransform = glm::perspective(glm::radians(45.0f), (float)mScreenWidth / (float)mScreenHeight, .5f, 100.0f);
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projectionTransform));
 
 	// Load vertex and texture data
 	while (!glfwWindowShouldClose(mWindow)) {
