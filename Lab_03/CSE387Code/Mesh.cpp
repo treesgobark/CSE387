@@ -22,6 +22,8 @@ void Mesh::draw()
 	// Set Modeling transformation
 	GLenum primitiveMode = GL_TRIANGLES;
 
+	glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(modelMatrix));
+
 	if (renderMode == ORDERED) {
 
 		// Fetch input data for pipeline	

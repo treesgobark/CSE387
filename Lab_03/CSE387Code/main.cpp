@@ -104,7 +104,6 @@ void initialize()
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 
-
 } // end initialize
 
 /**
@@ -140,7 +139,9 @@ static void render_scene_callback()
 } // end RenderSceneCB
 
 void update() {
-
+	figureOne.modelMatrix = figureOne.modelMatrix *
+		glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
+	cout << figureOne.modelMatrix << endl;
 }
 
 int main(int argc, char** argv)
@@ -192,6 +193,8 @@ int main(int argc, char** argv)
 
 	// Load vertex and texture data
 	while (!glfwWindowShouldClose(mWindow)) {
+		update();
+
 		render_scene_callback();
 
 		// Processes events that are already in the event queue by 
