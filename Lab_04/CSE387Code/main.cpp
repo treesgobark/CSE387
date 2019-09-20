@@ -115,6 +115,12 @@ void initialize()
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 
+
+
+	for (int j = 0; j < width; j++) {
+
+	}
+
 } // end initialize
 
 /**
