@@ -1,5 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "FigureOne.h"
+#include "FigureTwo.h"
 #include "MathLibsConstsFuncs.h"
 #include "BuildShaderProgram.h"
 
@@ -16,6 +18,15 @@ GLFWwindow* mWindow;
 // This will identify our vertex buffer
 GLuint vertexbuffers[3];
 
+float rotationX = 0.3f;
+float rotationY = 0.5f;
+float rotationZ = 0.7f;
+
+FigureOne figureOne;
+FigureTwo figureTwo;
+FigureTwo cube1;
+FigureTwo cube2;
+
 void window_close_callback(GLFWwindow* window) {
 	// Destroy the window
 	glfwDestroyWindow(window);
@@ -24,6 +35,8 @@ void window_close_callback(GLFWwindow* window) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+	mat4 projectionTransform = glm::perspective(glm::radians(45.0f), (float)width / (float)height, .5f , 100.0f);
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projectionTransform));
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -75,6 +88,7 @@ void displayOpenGlInfo(void)
 */
 void initialize()
 {
+	cout << "big kek" << endl;
 	// Display OpenGL context information on the command console.
 	displayOpenGlInfo();
 
@@ -93,56 +107,13 @@ void initialize()
 	
 	shaderProgram = BuildShaderProgram(shaders);
 
-	//Generate vertex array object and bind it for the first time
-	glGenVertexArrays(3, vertexArrayObjects);
+	figureOne.initialize(shaderProgram);
+	figureTwo.initialize(shaderProgram);
+	cube1.initialize(shaderProgram);
+	cube2.initialize(shaderProgram);
 
-	// An array of 3 vectors which represents 3 vertices
-	static const GLfloat g_vertex_buffer_data1[] = {
-	   -0.7f,  0.0f,  0.0f,
-	   -0.5f,  0.5f,  0.0f,
-	   -0.3f,  0.0f,  0.0f,
-	    0.3f,  0.0f,  0.0f,
-	    0.5f,  0.5f,  0.0f,
-	    0.7f,  0.0f,  0.0f,
-	   -0.2f,  0.0f,  0.0f,
-	    0.0f, -0.5f,  0.0f,
-	    0.2f,  0.0f,  0.0f,
-	};
-
-	static const GLfloat g_vertex_buffer_data2[] = {
-		-0.75f,  0.5f,  0.0f,
-		 -0.5f,  0.5f,  0.0f,
-		-0.75f,  0.5f,  0.0f,
-		  0.5f,  0.5f,  0.0f,
-	 	 0.75f,  0.5f,  0.0f,
-		-0.75f, -0.5f,  0.0f,
-		 -0.5f, -0.5f,  0.0f,
-		-0.75f, -0.5f,  0.0f,
-		  0.5f, -0.5f,  0.0f,
-		 0.75f, -0.5f,  0.0f,
-	};
-
-	static const GLfloat g_vertex_buffer_data3[] = {
-		-0.75f,   0.0f,  0.0f,
-		  0.0f, -0.75f,  0.0f,
-		 0.75f,   0.0f,  0.0f,
-		  0.0f,  0.75f,  0.0f,
-	};
-
-	// Generate 3 buffers, put the resulting identifier in vertexbuffer
-	glGenBuffers(3, vertexbuffers);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[0]);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data1), g_vertex_buffer_data1, GL_STATIC_DRAW);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[1]);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data2), g_vertex_buffer_data2, GL_STATIC_DRAW);
-	// The following commands will talk about our 'vertexbuffer' buffer
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[2]);
-	// Give our vertices to OpenGL.
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data3), g_vertex_buffer_data3, GL_STATIC_DRAW);
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
+	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 
 } // end initialize
 
@@ -155,31 +126,24 @@ static void render_scene_callback()
 	// clear the both the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	mat4 viewTransform = glm::lookAt(vec3(0.0f, 0.0f, -3.0f), vec3(0.0f, 0.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+	glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(viewTransform));
+	//cout << viewTransform << endl;
+
 	// 1st attribute buffer : vertices
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vertexbuffers[mode-1]);
-	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		0,                  // stride
-		(void*)0            // array buffer offset
-	);
-
-	// Bind vertex array object
-	glBindVertexArray(vertexArrayObjects[mode-1]);
-
-	// Use the shader program
-	glUseProgram(shaderProgram);
 
 	// Fetch input data for pipeline	
 	switch (mode) {
-	case 1: glDrawArrays(GL_TRIANGLES, 0, 9);
+	case 1:
+		figureOne.draw();
 		break;
-	case 2: glDrawArrays(GL_TRIANGLE_STRIP, 0, 10);
+	case 2:
+		figureTwo.draw();
 		break;
-	case 3: glDrawElements(GL_TRIANGLES, 18, GL_UNSIGNED_INT, 0);
+	case 3:
+		cube1.draw();
+		cube2.draw();
 		break;
 	}
 	glDisableVertexAttribArray(0);
@@ -188,6 +152,36 @@ static void render_scene_callback()
 	glfwSwapBuffers(mWindow);
 
 } // end RenderSceneCB
+
+void update() {
+	switch (mode) {
+	case 1:
+		figureOne.modelMatrix = figureOne.modelMatrix *
+			glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
+		break;
+	case 2:
+		rotationX += 0.02f;
+		rotationY += 0.03f;
+		rotationZ += 0.05f;
+		figureTwo.modelMatrix = figureTwo.modelMatrix *
+			glm::rotate(glm::radians(sin(rotationX/2)), vec3(1, 0, 0)) *
+			glm::rotate(glm::radians(sin(rotationY/2)), vec3(0, 1, 0)) *
+			glm::rotate(glm::radians(sin(rotationZ/2)), vec3(0, 0, 1));
+		//figureOne.modelMatrix = figureOne.modelMatrix *
+		//	glm::rotate(glm::radians(1.0f), vec3(0, 1, 0));
+		break;
+	case 3: 
+		cube1.modelMatrix = cube1.modelMatrix *
+			glm::translate(mat4(), vec3(0.01f, 0.0f, 0.0f)) *
+			glm::rotate(glm::radians(1.0f), vec3(0, 1, 0));
+		cube2.modelMatrix = cube2.modelMatrix *
+			glm::translate(mat4(), vec3(-0.01f, 0.0f, 0.0f)) *
+			glm::rotate(glm::radians(1.0f), vec3(0, -1, 0));
+		//figureOne.modelMatrix = figureOne.modelMatrix *
+		//	glm::rotate(glm::radians(1.0f), vec3(1, 0, 0));
+		break;
+	}
+}
 
 int main(int argc, char** argv)
 {
@@ -213,6 +207,10 @@ int main(int argc, char** argv)
 
 	glfwMakeContextCurrent(mWindow);
 
+	// Set the swap interval for the OpenGL context i.e. the number of screen
+	// updates to wait between before swapping the buffer and returning.
+	glfwSwapInterval(1);
+
 	// Prevent possible initialization error when using the core context
 	glewExperimental = GL_TRUE; GLenum res = glewInit(); // Must be done after glut is initialized!
 	if (res != GLEW_OK) {
@@ -230,8 +228,13 @@ int main(int argc, char** argv)
 
 	initialize();
 
+	mat4 projectionTransform = glm::perspective(glm::radians(45.0f), (float)mScreenWidth / (float)mScreenHeight, .5f, 100.0f);
+	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projectionTransform));
+
 	// Load vertex and texture data
 	while (!glfwWindowShouldClose(mWindow)) {
+		update();
+
 		render_scene_callback();
 
 		// Processes events that are already in the event queue by 

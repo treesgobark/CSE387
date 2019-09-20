@@ -23,7 +23,7 @@
     <ProjectGuid>{53B951F2-CCFA-4F31-BC9D-3E9B40E55E03}</ProjectGuid>
     <RootNamespace>CSE387Code</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CSE387Lab4</ProjectName>
+    <ProjectName>CSE387Lab3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -159,13 +159,19 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BuildShaderProgram.h" />
+    <ClInclude Include="FigureOne.h" />
+    <ClInclude Include="FigureTwo.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MathLibsConstsFuncs.h" />
+    <ClInclude Include="Mesh.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BuildShaderProgram.cpp" />
+    <ClCompile Include="FigureOne.cpp" />
+    <ClCompile Include="FigureTwo.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathLibsConstsFuncs.cpp" />
+    <ClCompile Include="Mesh.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
