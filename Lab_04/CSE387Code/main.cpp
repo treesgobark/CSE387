@@ -136,7 +136,6 @@ static void render_scene_callback()
 	// Fetch input data for pipeline	
 	switch (mode) {
 	case 1:
-		figureOne.draw();
 		break;
 	case 2:
 		figureTwo.draw();
@@ -156,8 +155,6 @@ static void render_scene_callback()
 void update() {
 	switch (mode) {
 	case 1:
-		figureOne.modelMatrix = figureOne.modelMatrix *
-			glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
 		break;
 	case 2:
 		rotationX += 0.02f;

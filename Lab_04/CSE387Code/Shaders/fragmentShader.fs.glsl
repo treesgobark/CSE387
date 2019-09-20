@@ -4,9 +4,11 @@
 
 
 in vec4 vertexColor;
+in vec2 TextCoord0;
 out vec4 fragmentColor;
 
 void main()
 {
-	fragmentColor = vertexColor;
+	//fragmentColor = vertexColor;
+	fragmentColor = texture( sampler, TexCoord0.st );
 }

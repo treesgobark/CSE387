@@ -7,6 +7,22 @@ FigureOne::~FigureOne()
 
 } // end destructor
 
+struct pctVertexData
+{
+	glm::vec4 m_pos;
+	glm::vec4 m_color;
+	glm::vec2 m_textCord;
+
+	pctVertexData() {}
+
+	pctVertexData(glm::vec4 pos, glm::vec4 col, glm::vec2 text)
+	{
+		m_pos = pos;
+		m_color = col;
+		m_textCord = text;
+
+	}
+};
 
 void FigureOne::initialize(GLuint shaderProgram)
 {
@@ -18,6 +34,12 @@ void FigureOne::initialize(GLuint shaderProgram)
 	const vec4 posAndCol[24] = { vec4(-0.25, -0.25, 0.0, 1.0), vec4(0.9, 0.1, 0.1, 1.0),
 							 vec4(0.25, -0.25, 0.0, 1.0),vec4(0.1, 0.9, 0.1, 1.0),
 							 vec4(0.0, 0.25, 0.0, 1.0), vec4(0.1, 0.1, 0.9, 1.0) };
+
+	std::vector<pctVertexData> pct;
+
+	pct.push_back(pctVertexData(vec4(-0.25, -0.25, 0.0, 1.0), vec4(0.9, 0.1, 0.1, 1.0), vec2(0.0f, 0.0f)));
+	pct.push_back(pctVertexData(vec4(0.25, -0.25, 0.0, 1.0), vec4(0.1, 0.9, 0.1, 1.0), vec2(2.0f, 0.0f)));
+	pct.push_back(pctVertexData(vec4(0.0, 0.25, 0.0, 1.0), vec4(0.1, 0.1, 0.9, 1.0), vec2(0.0f, 2.0f)));
 
 	// Generate vertex array object and bind it for the first time
 	glGenVertexArrays(1, &VAO);
