@@ -166,6 +166,10 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClInclude Include="main.h" />
     <ClInclude Include="MathLibsConstsFuncs.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="SharedGeneralLighting.h" />
+    <ClInclude Include="SharedMaterialProperties.h" />
+    <ClInclude Include="SharedProjectionAndViewing.h" />
+    <ClInclude Include="SharedUniformBlock.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BuildShaderProgram.cpp" />
@@ -174,6 +178,9 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathLibsConstsFuncs.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="SharedGeneralLighting.cpp" />
+    <ClCompile Include="SharedMaterialProperties.cpp" />
+    <ClCompile Include="SharedUniformBlock.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

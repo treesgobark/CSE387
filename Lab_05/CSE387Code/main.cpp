@@ -4,6 +4,9 @@
 #include "FigureTwo.h"
 #include "MathLibsConstsFuncs.h"
 #include "BuildShaderProgram.h"
+#include "SharedGeneralLighting.h"
+#include "SharedMaterialProperties.h"
+#include "SharedProjectionAndViewing.h"
 
 // Variable to hold the integer identifier for the shader program
 GLuint shaderProgram;
@@ -106,6 +109,18 @@ void initialize()
 	};
 	
 	shaderProgram = BuildShaderProgram(shaders);
+
+	SharedGeneralLighting::setUniformBlockForShader(shaderProgram);
+
+	SharedMaterialProperties::setUniformBlockForShader(shaderProgram);
+
+	SharedGeneralLighting::setAmbientColor(GL_LIGHT_ZERO, vec4(0.5, 0.0, 1.0, 1.0));
+
+	Material mat;
+
+	mat.ambientMat = vec4(0.3, 0.3, 0.7, 1.0);
+
+	SharedMaterialProperties::setShaderMaterialProperties(&mat);
 
 	figureOne.initialize(shaderProgram);
 	figureTwo.initialize(shaderProgram);
