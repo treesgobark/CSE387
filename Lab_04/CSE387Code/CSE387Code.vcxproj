@@ -101,8 +101,10 @@
       <AdditionalLibraryDirectories>..\External\FreeImage\lib;..\External\FMOD\lib;..\External\assimp\lib;..\External\Bullet\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>copy "$(SolutionDir)"\External\FreeImage\lib\"*.dll" "$(SolutionDir)"\x64\Debug\
+copy "$(SolutionDir)"\External\assimp\lib\"*.dll" "$(SolutionDir)"\x64\Debug\
+copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Debug\
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
