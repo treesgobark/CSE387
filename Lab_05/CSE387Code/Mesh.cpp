@@ -1,5 +1,5 @@
 #include "Mesh.h"
-
+#include "Texture.h"
 
 
  
@@ -9,10 +9,15 @@ Mesh::~Mesh()
 
 } // end destructor
 
+void Mesh::setTexture(Texture texture) {
+	tex = texture;
+}
 
 // Preform drawing operations. 
 void Mesh::draw()
 {
+	tex.setActive();
+
 	// Bind vertex array object
 	glBindVertexArray(VAO);
 
@@ -35,6 +40,8 @@ void Mesh::draw()
 		// Fetch input data for pipeline	
 		glDrawElements(primitiveMode, count, GL_UNSIGNED_INT, 0);
 	}
+
+	tex.deactivate();
 
 } // end draw
 

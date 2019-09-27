@@ -60,26 +60,27 @@ layout(shared) uniform MaterialBlock
 	Material object;
 };
 
+layout (shared) uniform worldEyeBlock
+{
+	vec3 worldEyePosition;
+};
 
 layout(location = 100) uniform sampler2D diffuseSampler;
 layout(location = 101) uniform sampler2D specularSampler;
 layout(location = 102) uniform sampler2D normalMapSampler;
 layout(location = 103) uniform sampler2D bumpMapSampler;
 
-
-
-
-
-
-
-in vec4 vertexColor;
-in vec2 TexCoor0;
+in vec2 TexCoord0;
 out vec4 fragmentColor;
+uniform vec4 objectColor;
+uniform sampler2D sampler;
 
 void main()
 {
-	//fragmentColor = vertexColor;
 	//fragmentColor = texture( sampler, TexCoord0.st );
-	fragmentColor = lights[0].diffuseColor;
-	fragmentColor = lights[0].ambientColor * object.ambientMat;
+	//vec4 texelColor = objectColor * texture( sampler, TexCoord0.st );
+	//fragmentColor = objectColor * (1 - texelColor.a) + texelColor * texelColor.a;
+	//fragmentColor.a = objectColor.a;
+	//fragmentColor = lights[0].diffuseColor * lights[0].ambientColor * object.ambientMat;
+	fragmentColor = lights[0].specularColor * object.specularMat;
 }

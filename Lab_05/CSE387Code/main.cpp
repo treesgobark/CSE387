@@ -6,7 +6,6 @@
 #include "BuildShaderProgram.h"
 #include "SharedGeneralLighting.h"
 #include "SharedMaterialProperties.h"
-#include "SharedProjectionAndViewing.h"
 
 // Variable to hold the integer identifier for the shader program
 GLuint shaderProgram;
@@ -17,6 +16,9 @@ GLuint vertexArrayObjects[3];
 GLuint mode = 1;
 
 GLFWwindow* mWindow;
+
+GLuint texBufferID;
+GLuint texCoordID, texID;
 
 // This will identify our vertex buffer
 GLuint vertexbuffers[3];
@@ -56,6 +58,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 			mode = 2;
 			break;
 		case GLFW_KEY_3:
+			mode = 3;
+			break;
+		case GLFW_KEY_X:
+			mode = 1;
+			break;
+		case GLFW_KEY_Y:
+			mode = 2;
+			break;
+		case GLFW_KEY_Z:
 			mode = 3;
 			break;
 		}
@@ -115,10 +126,14 @@ void initialize()
 	SharedMaterialProperties::setUniformBlockForShader(shaderProgram);
 
 	SharedGeneralLighting::setAmbientColor(GL_LIGHT_ZERO, vec4(0.5, 0.0, 1.0, 1.0));
+	SharedGeneralLighting::setDiffuseColor(GL_LIGHT_ZERO, vec4(0.9, 0.9, 0.9, 1.0));
+	SharedGeneralLighting::setSpecularColor(GL_LIGHT_ZERO, vec4(0.9, 0.9, 0.9, 1.0));
 
 	Material mat;
 
-	mat.ambientMat = vec4(0.3, 0.3, 0.7, 1.0);
+    mat.ambientMat = vec4(0.3, 0.3, 0.7, 1.0);
+	mat.diffuseMat = vec4(0.5, 0.4, 0.3, 1.0);
+	mat.specularMat = vec4(0.6, 0.7, 0.8, 1.0);
 
 	SharedMaterialProperties::setShaderMaterialProperties(&mat);
 
@@ -129,6 +144,11 @@ void initialize()
 
 	glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
 	glUniformMatrix4fv(2, 1, GL_FALSE, glm::value_ptr(mat4(1.0f)));
+
+	Texture brickTexture;
+	brickTexture.load("Textures/BRICK.bmp");
+	figureOne.setTexture(brickTexture);
+	figureTwo.setTexture(brickTexture);
 
 } // end initialize
 
@@ -149,7 +169,7 @@ static void render_scene_callback()
 	glEnableVertexAttribArray(0);
 
 	// Fetch input data for pipeline	
-	switch (mode) {
+	/*switch (mode) {
 	case 1:
 		figureOne.draw();
 		break;
@@ -160,7 +180,8 @@ static void render_scene_callback()
 		cube1.draw();
 		cube2.draw();
 		break;
-	}
+	}*/
+	figureTwo.draw();
 	glDisableVertexAttribArray(0);
 
 	// flush all drawing commands and swap the front and back buffers
@@ -169,15 +190,11 @@ static void render_scene_callback()
 } // end RenderSceneCB
 
 void update() {
-	switch (mode) {
+	/*switch (mode) {
 	case 1:
-		figureOne.modelMatrix = figureOne.modelMatrix *
-			glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
+		figureOne.modelMatrix = figureOne.modelMatrix * glm::rotate(glm::radians(1.0f), vec3(0, 1, 0));
 		break;
 	case 2:
-		rotationX += 0.02f;
-		rotationY += 0.03f;
-		rotationZ += 0.05f;
 		figureTwo.modelMatrix = figureTwo.modelMatrix *
 			glm::rotate(glm::radians(sin(rotationX/2)), vec3(1, 0, 0)) *
 			glm::rotate(glm::radians(sin(rotationY/2)), vec3(0, 1, 0)) *
@@ -194,6 +211,17 @@ void update() {
 			glm::rotate(glm::radians(1.0f), vec3(0, -1, 0));
 		//figureOne.modelMatrix = figureOne.modelMatrix *
 		//	glm::rotate(glm::radians(1.0f), vec3(1, 0, 0));
+		break;
+	}*/
+	switch (mode) {
+	case 1:
+		figureTwo.modelMatrix = figureTwo.modelMatrix * glm::rotate(glm::radians(1.0f), vec3(1, 0, 0));
+		break;
+	case 2:
+		figureTwo.modelMatrix = figureTwo.modelMatrix * glm::rotate(glm::radians(1.0f), vec3(0, 1, 0));
+		break;
+	case 3:
+		figureTwo.modelMatrix = figureTwo.modelMatrix * glm::rotate(glm::radians(1.0f), vec3(0, 0, 1));
 		break;
 	}
 }

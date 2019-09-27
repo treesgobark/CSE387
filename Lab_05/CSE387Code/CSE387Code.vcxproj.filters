@@ -13,29 +13,14 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{c4b1752d-85a9-4d53-bbe1-705a45c8eabb}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Shaders\fragmentShader.fs.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\geometryShader.gs.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="packages.config">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\tessellationControlShader.tcs.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\tessellationEvaluationShader.tes.glsl">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\vertexShader.vs.glsl">
-      <Filter>Shaders</Filter>
-    </None>
+    <None Include="packages.config" />
+    <None Include="Shaders\geometryShader.gs.glsl" />
+    <None Include="Shaders\tessellationControlShader.tcs.glsl" />
+    <None Include="Shaders\tessellationEvaluationShader.tes.glsl" />
+    <None Include="Shaders\vertexShader.vs.glsl" />
+    <None Include="Shaders\fragmentShader.fs.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MathLibsConstsFuncs.h">
@@ -56,6 +41,9 @@
     <ClInclude Include="FigureTwo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="SharedGeneralLighting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -66,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SharedUniformBlock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelMesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -88,6 +79,9 @@
     <ClCompile Include="FigureTwo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="SharedGeneralLighting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -95,6 +89,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SharedUniformBlock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
