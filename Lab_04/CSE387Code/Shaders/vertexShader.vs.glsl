@@ -11,9 +11,13 @@ layout (location = 1) in vec4 vertexColorIn;
 
 out vec4 vertexColor;
 
+layout (location = 2) in vec2 vertexTexCoord;
+out vec2 TexCoord0;
+
 void main(void)
 {
 	// Calculate the position in clip coordinates
 	gl_Position = projectionMatrix * viewMatrix * modelMatrix * vertexPosition;
 	vertexColor = vertexColorIn;
+	TexCoord0 = vertexTexCoord;
 }

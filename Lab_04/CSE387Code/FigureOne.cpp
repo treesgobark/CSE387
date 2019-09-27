@@ -31,15 +31,11 @@ void FigureOne::initialize(GLuint shaderProgram)
 
 //	cout << "fig one initialize" << endl;
 
-	const vec4 posAndCol[24] = { vec4(-0.25, -0.25, 0.0, 1.0), vec4(0.9, 0.1, 0.1, 1.0),
-							 vec4(0.25, -0.25, 0.0, 1.0),vec4(0.1, 0.9, 0.1, 1.0),
-							 vec4(0.0, 0.25, 0.0, 1.0), vec4(0.1, 0.1, 0.9, 1.0) };
-
 	std::vector<pctVertexData> pct;
 
 	pct.push_back(pctVertexData(vec4(-0.25, -0.25, 0.0, 1.0), vec4(0.9, 0.1, 0.1, 1.0), vec2(0.0f, 0.0f)));
-	pct.push_back(pctVertexData(vec4(0.25, -0.25, 0.0, 1.0), vec4(0.1, 0.9, 0.1, 1.0), vec2(2.0f, 0.0f)));
-	pct.push_back(pctVertexData(vec4(0.0, 0.25, 0.0, 1.0), vec4(0.1, 0.1, 0.9, 1.0), vec2(0.0f, 2.0f)));
+	pct.push_back(pctVertexData(vec4(0.25, -0.25, 0.0, 1.0), vec4(0.1, 0.9, 0.1, 1.0), vec2(1.0f, 0.0f)));
+	pct.push_back(pctVertexData(vec4(0.0, 0.25, 0.0, 1.0), vec4(0.1, 0.1, 0.9, 1.0), vec2(0.5f, 1.0f)));
 
 	// Generate vertex array object and bind it for the first time
 	glGenVertexArrays(1, &VAO);
@@ -49,15 +45,19 @@ void FigureOne::initialize(GLuint shaderProgram)
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
 	// Load positions and colors into the same buffer
-	glBufferData(GL_ARRAY_BUFFER, 6 * 4 * 4, posAndCol, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, pct.size() * sizeof(pctVertexData), &pct.front(), GL_STATIC_DRAW);
 
 	// Specify the location and data format of an array of vertex positions
-	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 16 + 16, 0);
+	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(pctVertexData), 0);
 	glEnableVertexAttribArray(0);
 
 	// Specify the location and data format of an array of vertex colors
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 16 + 16, (const void*)16);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(pctVertexData), (const void*)sizeof(vec4));
 	glEnableVertexAttribArray(1);
+
+	// Specify the location and data format of an array of texture coordinates
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(pctVertexData), (const void*)(2 * sizeof(vec4)));
+	glEnableVertexAttribArray(2);
 
 	renderMode = ORDERED;
 
@@ -65,5 +65,4 @@ void FigureOne::initialize(GLuint shaderProgram)
 	count = 3;
 
 	modelLocation = 2;
-
 }

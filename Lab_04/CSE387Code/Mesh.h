@@ -2,6 +2,7 @@
 
 #include "MathLibsConstsFuncs.h"
 #include "BuildShaderProgram.h"
+#include "Texture.h"
 
 
 //#include "Material.h"
@@ -41,6 +42,8 @@ public:
 	// Material for lighting calculations
 	//Material material;
 
+	virtual void setTexture(Texture tex);
+
 protected:
 
 	/**
@@ -69,6 +72,8 @@ protected:
 	 * @brief	Number of vertices or indices to be processed for either ordered or indexed rendering
 	*/
 	GLuint count = 0;
+
+	Texture tex;
 
 }; // end VisualObject class
 
