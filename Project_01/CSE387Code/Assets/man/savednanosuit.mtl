@@ -1,0 +1,79 @@
+# Blender MTL File: 'nanosuit.blend'
+# Material Count: 6
+newmtl Arm						# new material called "Arm" 
+Ns 96.078431					# specular exponent
+Ka 0.000000 0.000000 0.000000	# ambient color
+Kd 0.640000 0.640000 0.640000	# diffuse color
+Ks 0.500000 0.500000 0.500000	#specular color
+Ni 1.000000						# "optical density" - index of refraction
+d 1.000000						# "Dissolved" indicates transparency (could be 'Tr' Tr = 1 - d)
+illum 2							# illumination model
+map_Kd arm_dif.png				# diffuse texture map
+map_Kn arm_showroom_ddn.png		# normal map 
+map_Ks arm_showroom_spec.png	# specular texture map
+
+
+newmtl Body
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd body_dif.png
+map_Kn body_showroom_ddn.png
+map_Ks body_showroom_spec.png
+
+
+newmtl Glass
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd glass_dif.png
+map_Kn glass_ddn.png
+
+
+newmtl Hand
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd hand_dif.png
+map_Kn hand_showroom_ddn.png
+map_Ks hand_showroom_spec.png
+
+
+newmtl Helmet
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd helmet_diff.png
+map_Kn helmet_showroom_ddn.png
+map_Ks helmet_showroom_spec.png
+
+
+newmtl Leg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd leg_dif.png
+map_Kn leg_showroom_ddn.png
+map_Ks leg_showroom_spec.png
+
+
