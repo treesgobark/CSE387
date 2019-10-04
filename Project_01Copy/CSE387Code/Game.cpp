@@ -192,8 +192,8 @@ void Game::InitializeGameObjects()
 {
 
 	dino1->initialize(shaderProgram);
-	dino1->modelMatrix = glm::rotate(glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 
+	dino1->modelMatrix = glm::rotate(glm::radians(90.0f), vec3(0.0f, 1.0f, 0.0f));
 
 	cout << "Components Initialized" << endl;
 }
