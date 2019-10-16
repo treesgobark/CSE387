@@ -17,7 +17,11 @@ protected:
 
 	float speed = 3.0;
 
-	float roarTimer = 0;
+	float roarTimer = 2.0f;
+
+	bool initialButtonPress = false;
+
+	float rotationDegrees = 0.0f;
 
 };
 

@@ -17,7 +17,10 @@ void SimpleMoveComponent::update(float deltaTime)
 
 	this->owningGameObject->localTransform = 
 		this->owningGameObject->localTransform 
-		* glm::translate(velocity * deltaTime);
+		* glm::translate(velocity * deltaTime)
+		* glm::rotate(glm::radians(rotationDegrees), UNIT_Y_V3);
+
+	roarTimer += deltaTime;
 }
 
 
@@ -39,7 +42,23 @@ void SimpleMoveComponent::processInput()
 
 	int leftButtonState = glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_LAST);
 
-	if (leftButtonState == GLFW_PRESS) {
+	if (leftButtonState == GLFW_PRESS && roarTimer > 2.0f) {
 		cout << "Roar!!" << endl;
+		roarTimer = 2.0f;
 	}
+
+	double xpos, ypos;
+
+	glfwGetCursorPos(win, &xpos, &ypos);
+
+	static double xPrevPos = xpos, yPrevPos = ypos;
+
+	float rotationInc = (xpos - xPrevPos);
+
+	rotationDegrees += rotationInc / 100;
+
+	cout << xpos << " " << ypos << endl;
+
+	xPrevPos = xpos;
+	yPrevPos = ypos;
 }
