@@ -10,6 +10,8 @@ public:
 
 	virtual void processInput() override;
 
+	virtual int getMotionKeyCountArrow();
+
 protected:
 
 	// keep at unit length
@@ -22,6 +24,8 @@ protected:
 	bool initialButtonPress = false;
 
 	float rotationDegrees = 0.0f;
+
+	float scale = 1.0f;
 
 };
 
