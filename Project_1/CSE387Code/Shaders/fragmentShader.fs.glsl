@@ -75,8 +75,72 @@ out vec4 fragmentColor;
 
 vec3 fragmentWorldNormal;
 
+vec3 shadingCalculation(GeneralLight light, Material material) {
+	if (!light.enabled) return vec3(0.0);
+	float ambientIntensity = 0.2;
+	float diffuseIntensity = 1.0;
+	float specularIntensity = 0.1;
+
+	vec3 ambient = ambientIntensity * light.ambientColor.xyz * material.ambientMat.xyz;
+
+	vec3 lightVector = normalize(light.positionOrDirection.xyz);
+	vec3 lightDirection = vec3(0.0f);
+
+	if (light.positionOrDirection.w == 0.0f)
+		lightDirection = lightVector;
+	else
+		lightDirection = normalize(lightVector - vertexWorldPosition);
+	
+	float difference = max(dot(vertexWorldNormal, lightDirection), 0.0f);
+	vec3 diffuse = diffuseIntensity * difference * light.diffuseColor.xyz * material.diffuseMat.xyz;
+
+	vec3 viewingDirection = normalize(worldEyePosition - vertexWorldPosition);
+	vec3 reflectionDirection = reflect(-lightDirection, vertexWorldNormal);
+	float strength = pow(max(dot(viewingDirection, reflectionDirection), 0.0), 2);
+	vec3 specular = specularIntensity * strength * light.specularColor.xyz * material.specularMat.xyz;
+
+	if (!light.isSpot) return ambient + diffuse + specular;
+
+	float theta = dot(lightDirection, normalize(-light.spotDirection));
+	float epsilon = light.spotCutoffCos*.1;
+	float spotIntensity = clamp((theta - light.spotCutoffCos) / epsilon, 0.0, 1.0);
+	if (theta > light.spotCutoffCos) return ambient + spotIntensity * diffuse + spotIntensity * specular;
+	return ambient;
+}
+
 void main()
 {
-	fragmentColor = texture(diffuseSampler, TexCoord.st);
+	// make copy of material properties that can be written to
+	Material material = object;
+
+	// Substitute diffuse texture for ambient and diffuse material properties
+	if (material.diffuseTextureEnabled == true && material.textureMode != 0) {
+
+		material.diffuseMat = texture(diffuseSampler, TexCoord.st);
+		material.ambientMat = material.diffuseMat;
+	}
+
+	// Substitute specular texture for specular material properties
+	if (material.specularTextureEnabled == true && material.textureMode != 0) {
+
+		material.specularMat = texture(specularSampler, TexCoord.st);
+	}
+
+	// Check if shading calculations should be performed
+	if (material.textureMode == 2 || material.textureMode == 0) {
+
+		fragmentColor = material.emmissiveMat;
+
+		for (int i = 0; i < MaxLights; i++) {
+
+			fragmentColor += vec4(shadingCalculation(lights[i], material), 1.0f);
+		}
+
+	}
+	else if (material.textureMode == 1) { // No shading calculations
+
+		fragmentColor = texture(diffuseSampler, TexCoord.st);
+}
+
 
 } // main

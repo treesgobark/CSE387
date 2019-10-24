@@ -36,6 +36,22 @@ static void windowCloseCallback(GLFWwindow* window)
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Game* that = static_cast<Game*>(glfwGetWindowUserPointer(window));
+	if (action == GLFW_PRESS) {
+		switch (key) {
+		case GLFW_KEY_1:
+			SharedGeneralLighting::setEnabled(GL_LIGHT_ZERO, !SharedGeneralLighting::getEnabled(GL_LIGHT_ZERO));
+			break;
+		case GLFW_KEY_2:
+			SharedGeneralLighting::setEnabled(GL_LIGHT_ONE, !SharedGeneralLighting::getEnabled(GL_LIGHT_ONE));
+			break;
+		case GLFW_KEY_3:
+			SharedGeneralLighting::setEnabled(GL_LIGHT_TWO, !SharedGeneralLighting::getEnabled(GL_LIGHT_TWO));
+			break;
+		case GLFW_KEY_4:
+			SharedGeneralLighting::setEnabled(GL_LIGHT_THREE, !SharedGeneralLighting::getEnabled(GL_LIGHT_THREE));
+			break;
+		}
+	}
 	that->key_callback( window, key, scancode, action, mods);
 }
 
@@ -174,15 +190,39 @@ bool Game::initializeGraphics()
 	 SharedMaterialProperties::setUniformBlockForShader(shaderProgram);
 	 SharedGeneralLighting::setUniformBlockForShader(shaderProgram);
 
-	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 0.0f));
+	 SharedGeneralLighting::setAmbientColor(GL_LIGHT_ZERO, vec4(1.0, 1.0, 1.0, 1.0));
 	 SharedGeneralLighting::setEnabled(GL_LIGHT_ZERO, true);
 
+	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_ONE, vec4(0.8, 0.3, 0.3, 1.0));
+	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_ONE, vec4(0.8, 0.3, 0.3, 1.0));
+	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_ONE, vec4(0.5, 0.5, 0.5, 1.0));
+	 SharedGeneralLighting::setEnabled(GL_LIGHT_ONE, true);
+
+	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_TWO, vec4(0.3, 0.8, 0.3, 1.0));
+	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_TWO, vec4(0.3, 0.8, 0.3, 1.0));
+	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_TWO, normalize(vec4(-1.0, -1.0, -1.0, 0.0)));
+	 SharedGeneralLighting::setEnabled(GL_LIGHT_TWO, true);
+
+	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_THREE, vec4(0.3, 0.3, 0.8, 1.0));
+	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_THREE, vec4(0.3, 0.3, 0.8, 1.0));
+	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_THREE, vec4(0.0, 2.0, 0.0, 1.0));
+	 SharedGeneralLighting::setIsSpot(GL_LIGHT_THREE, true);
+	 SharedGeneralLighting::setSpotDirection(GL_LIGHT_THREE, vec4(0.0, 0.0, -1.0, 1.0));
+	 SharedGeneralLighting::setSpotCutoffCos(GL_LIGHT_THREE, 0.8);
+	 SharedGeneralLighting::setEnabled(GL_LIGHT_THREE, true);
+
 	 GameObject* dinoGameObject = new GameObject(this);
-
 	 dinoGameObject->addComponent(new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram));
-
 	 dinoGameObject->addComponent(new SimpleMoveComponent());
+
+	 GameObject* oliveGameObject = new GameObject(this);
+	 oliveGameObject->localTransform = scale(oliveGameObject->localTransform * translate(vec3(-2.0f, 0.0f, -5.0f)), vec3(0.1));
+	 oliveGameObject->addComponent(new ModelMeshComponent("Assets/OliveOil/olive_oil.obj", shaderProgram));
+	 oliveGameObject->addComponent(new SimpleMoveComponent());
+
+	 GameObject* antGameObject = new GameObject(this);
+	 antGameObject->addComponent(new ModelMeshComponent("Assets/Ant/ant.obj", shaderProgram));
+	 antGameObject->addComponent(new SimpleMoveComponent());
 
 } // end loadData
 
