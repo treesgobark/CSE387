@@ -12,6 +12,7 @@
 #include "BuildShaderProgram.h"
 
 #include "SimpleMoveComponent.h"
+#include "SoundEngine.h"
 
 
 //********************* Static Function declarations *****************************************
@@ -20,6 +21,7 @@ void glfw_error_callback(int error, const char* description);
 void displayOpenGlInfo(void);
 void GLAPIENTRY openglMessageCallback(	GLenum source, GLenum type, GLuint id, GLenum severity, 
 										GLsizei length, const GLchar* message, const void* userParam);
+SoundSourceComponent* roar;
 
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
@@ -66,7 +68,7 @@ Game::Game(std::string windowTitle)
 
 Game::~Game()
 {
-
+	SoundEngine::Stop();
 } // end Game Destructor
 
 bool Game::initialize()
@@ -211,9 +213,18 @@ bool Game::initializeGraphics()
 	 SharedGeneralLighting::setSpotCutoffCos(GL_LIGHT_THREE, 0.8);
 	 SharedGeneralLighting::setEnabled(GL_LIGHT_THREE, true);
 
+	 GameObject* emptyGameObject = new GameObject(this);
+	 this->sceneNode.addChild(emptyGameObject);
+	 emptyGameObject->sceneNode.setPosition(vec3(0.0f, 0.0f, 0.0f), LOCAL);
+
+	 emptyGameObject->addComponent();
+
 	 GameObject* dinoGameObject = new GameObject(this);
 	 dinoGameObject->addComponent(new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram));
 	 dinoGameObject->addComponent(new SimpleMoveComponent());
+
+	 roar = new SoundSourceComponent("Assets/T_Goose.mp3", 4);
+	 dinoGameObject->addComponent(roar);
 
 	 GameObject* oliveGameObject = new GameObject(this);
 	 oliveGameObject->localTransform = scale(oliveGameObject->localTransform * translate(vec3(-2.0f, 0.0f, -5.0f)), vec3(0.1));
@@ -336,6 +347,8 @@ void Game::updateGame()
 		mat4 viewingTransformation = glm::lookAt(vec3(0.0f, 5.0f, 20.0f), vec3(0.0f, 5.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
 		//glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(viewingTransformation));
 		SharedProjectionAndViewing::setViewMatrix(viewingTransformation);
+
+		SoundEngine::Update(deltaTime);
 
 		// Save current time to determine when the scene should be rendered next
 		lastRenderTime = currentTime;
@@ -498,6 +511,12 @@ void Game::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 
 			// Stop the game loop
 			this->isRunning = false;
+
+			break;
+
+		case GLFW_KEY_R: 
+
+			roar->play(false);
 
 			break;
 

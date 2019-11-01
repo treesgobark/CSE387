@@ -7,6 +7,11 @@
 #include <fmod_studio.hpp>
 #include <fmod_errors.h>
 
+#include "SoundBaseComponent.h"
+#include "SoundListenerComponent.h"
+#include "SoundReverbZoneComponent.h"
+#include "SoundSourceComponent.h"
+
 class SoundEngine 
 {
 public:

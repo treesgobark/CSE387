@@ -170,6 +170,11 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClInclude Include="SharedProjectionAndViewing.h" />
     <ClInclude Include="SharedUniformBlock.h" />
     <ClInclude Include="SimpleMoveComponent.h" />
+    <ClInclude Include="SoundBaseComponent.h" />
+    <ClInclude Include="SoundEngine.h" />
+    <ClInclude Include="SoundListenerComponent.h" />
+    <ClInclude Include="SoundReverbZoneComponent.h" />
+    <ClInclude Include="SoundSourceComponent.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +192,11 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClCompile Include="SharedProjectionAndViewing.cpp" />
     <ClCompile Include="SharedUniformBlock.cpp" />
     <ClCompile Include="SimpleMoveComponent.cpp" />
+    <ClCompile Include="SoundBaseComponent.cpp" />
+    <ClCompile Include="SoundEngine.cpp" />
+    <ClCompile Include="SoundListenerComponent.cpp" />
+    <ClCompile Include="SoundReverbZoneComponent.cpp" />
+    <ClCompile Include="SoundSourceComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

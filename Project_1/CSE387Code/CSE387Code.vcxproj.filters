@@ -25,6 +25,9 @@
     <Filter Include="SharedUniforms">
       <UniqueIdentifier>{d0c753b7-5ed8-430f-b945-dae57c93b540}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{a00fdc7f-0044-49ff-91f9-319032c0396e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -70,6 +73,21 @@
     </ClInclude>
     <ClInclude Include="BuildShaderProgram.h">
       <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundBaseComponent.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundListenerComponent.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundReverbZoneComponent.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSourceComponent.h">
+      <Filter>Sound</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +135,21 @@
     </ClCompile>
     <ClCompile Include="BuildShaderProgram.cpp">
       <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundBaseComponent.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundListenerComponent.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundReverbZoneComponent.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSourceComponent.cpp">
+      <Filter>Sound</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
