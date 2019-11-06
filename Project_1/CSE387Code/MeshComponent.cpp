@@ -31,7 +31,7 @@ void MeshComponent::draw()
 	// Set Modeling transformation
 	//glUniformMatrix4fv(this->owningGameObject->modelLocation, 1, GL_FALSE, glm::value_ptr(this->owningGameObject->localTransform));
 
-	SharedProjectionAndViewing::setModelingMatrix(this->owningGameObject->localTransform);
+	SharedProjectionAndViewing::setModelingMatrix(this->owningGameObject->sceneNode.getModelingTransformation());
 
 	for (auto& subMesh : subMeshes) {
 

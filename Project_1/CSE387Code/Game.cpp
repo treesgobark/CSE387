@@ -11,17 +11,12 @@
 #include "SharedProjectionAndViewing.h"
 #include "BuildShaderProgram.h"
 
-#include "SimpleMoveComponent.h"
-#include "SoundEngine.h"
-
-
 //********************* Static Function declarations *****************************************
 
 void glfw_error_callback(int error, const char* description);
 void displayOpenGlInfo(void);
 void GLAPIENTRY openglMessageCallback(	GLenum source, GLenum type, GLuint id, GLenum severity, 
 										GLsizei length, const GLchar* message, const void* userParam);
-SoundSourceComponent* roar;
 
 static void framebufferResizeCallback(GLFWwindow* window, int width, int height)
 {
@@ -38,22 +33,6 @@ static void windowCloseCallback(GLFWwindow* window)
 static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 	Game* that = static_cast<Game*>(glfwGetWindowUserPointer(window));
-	if (action == GLFW_PRESS) {
-		switch (key) {
-		case GLFW_KEY_1:
-			SharedGeneralLighting::setEnabled(GL_LIGHT_ZERO, !SharedGeneralLighting::getEnabled(GL_LIGHT_ZERO));
-			break;
-		case GLFW_KEY_2:
-			SharedGeneralLighting::setEnabled(GL_LIGHT_ONE, !SharedGeneralLighting::getEnabled(GL_LIGHT_ONE));
-			break;
-		case GLFW_KEY_3:
-			SharedGeneralLighting::setEnabled(GL_LIGHT_TWO, !SharedGeneralLighting::getEnabled(GL_LIGHT_TWO));
-			break;
-		case GLFW_KEY_4:
-			SharedGeneralLighting::setEnabled(GL_LIGHT_THREE, !SharedGeneralLighting::getEnabled(GL_LIGHT_THREE));
-			break;
-		}
-	}
 	that->key_callback( window, key, scancode, action, mods);
 }
 
@@ -68,7 +47,7 @@ Game::Game(std::string windowTitle)
 
 Game::~Game()
 {
-	SoundEngine::Stop();
+
 } // end Game Destructor
 
 bool Game::initialize()
@@ -174,8 +153,8 @@ bool Game::initializeGraphics()
 
  void Game::loadData()
 {
+	 // Set the clear color
 	 glClearColor(static_cast<GLclampf>(0.2), static_cast<GLclampf>(0.5), static_cast<GLclampf>(0.8), static_cast<GLclampf>(1.0));
-
 
 	 // Build shader program
 	 ShaderInfo shaders[] = {
@@ -192,55 +171,36 @@ bool Game::initializeGraphics()
 	 SharedMaterialProperties::setUniformBlockForShader(shaderProgram);
 	 SharedGeneralLighting::setUniformBlockForShader(shaderProgram);
 
-	 SharedGeneralLighting::setAmbientColor(GL_LIGHT_ZERO, vec4(1.0, 1.0, 1.0, 1.0));
+	 SharedGeneralLighting::setAmbientColor(GL_LIGHT_ZERO, vec4(0.3f, 0.3f, 0.3f, 1.0f));
+	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 0.0f));
 	 SharedGeneralLighting::setEnabled(GL_LIGHT_ZERO, true);
 
-	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_ONE, vec4(0.8, 0.3, 0.3, 1.0));
-	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_ONE, vec4(0.8, 0.3, 0.3, 1.0));
-	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_ONE, vec4(0.5, 0.5, 0.5, 1.0));
-	 SharedGeneralLighting::setEnabled(GL_LIGHT_ONE, true);
-
-	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_TWO, vec4(0.3, 0.8, 0.3, 1.0));
-	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_TWO, vec4(0.3, 0.8, 0.3, 1.0));
-	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_TWO, normalize(vec4(-1.0, -1.0, -1.0, 0.0)));
-	 SharedGeneralLighting::setEnabled(GL_LIGHT_TWO, true);
-
-	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_THREE, vec4(0.3, 0.3, 0.8, 1.0));
-	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_THREE, vec4(0.3, 0.3, 0.8, 1.0));
-	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_THREE, vec4(0.0, 2.0, 0.0, 1.0));
-	 SharedGeneralLighting::setIsSpot(GL_LIGHT_THREE, true);
-	 SharedGeneralLighting::setSpotDirection(GL_LIGHT_THREE, vec4(0.0, 0.0, -1.0, 1.0));
-	 SharedGeneralLighting::setSpotCutoffCos(GL_LIGHT_THREE, 0.8);
-	 SharedGeneralLighting::setEnabled(GL_LIGHT_THREE, true);
-
 	 GameObject* emptyGameObject = new GameObject(this);
-	 this->sceneNode.addChild(emptyGameObject);
-	 emptyGameObject->sceneNode.setPosition(vec3(0.0f, 0.0f, 0.0f), LOCAL);
-
-	 emptyGameObject->addComponent();
+	 sceneNode.addChild(emptyGameObject);
+	 sceneNode.setPosition(vec3(0.0f, 0.0f, -10.0f), WORLD);
 
 	 GameObject* dinoGameObject = new GameObject(this);
-	 dinoGameObject->addComponent(new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram));
-	 dinoGameObject->addComponent(new SimpleMoveComponent());
+	 emptyGameObject->sceneNode.addChild(dinoGameObject);
+	 ModelMeshComponent * dino1 = new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram);
+	 dinoGameObject->addComponent(dino1);
 
-	 roar = new SoundSourceComponent("Assets/T_Goose.mp3", 4);
-	 dinoGameObject->addComponent(roar);
-
-	 GameObject* oliveGameObject = new GameObject(this);
-	 oliveGameObject->localTransform = scale(oliveGameObject->localTransform * translate(vec3(-2.0f, 0.0f, -5.0f)), vec3(0.1));
-	 oliveGameObject->addComponent(new ModelMeshComponent("Assets/OliveOil/olive_oil.obj", shaderProgram));
-	 oliveGameObject->addComponent(new SimpleMoveComponent());
-
-	 GameObject* antGameObject = new GameObject(this);
-	 antGameObject->addComponent(new ModelMeshComponent("Assets/Ant/ant.obj", shaderProgram));
-	 antGameObject->addComponent(new SimpleMoveComponent());
+	 //GameObject* sphereGameObject = new GameObject(this);
+	 //sceneNode.addChild(sphereGameObject);
+	 //Material * material = new Material();
+	 //material->setDiffuseMat(vec4(1.0f, 0.0, 0.0f, 1.0f));
+	 //material->setSpecularMat(vec4(1.0f, 1.0f, 1.0f, 0.0f));
+	 //material->setSpecularExponentMat(128.0f);
+	 //material->setTextureMode(NO_TEXTURE);
+	 //sphereGameObject->addComponent(new SphereMeshComponent(shaderProgram, material));
 
 } // end loadData
 
 
 void Game::initializeGameObjects()
 {
-	for (auto gameObject : inGameObjects) {
+	for (auto gameObject : sceneNode.children) {
 
 		gameObject->initialize();
 	}
@@ -280,13 +240,14 @@ https://www.glfw.org/docs/latest/group__keys.html
 */
 void Game::processInput()
 {
-	this->updatingGameObjects = true;
+	SceneNode::updatingGameObjects = true;
 
 	// Update all the game objects in the game
-	for (auto gameObject : this->inGameObjects) {
+	for (auto gameObject : sceneNode.children) {
+	//for (auto gameObject : this->inGameObjects) {
 		gameObject->processInput();
 	}
-	this->updatingGameObjects = false;
+	SceneNode::updatingGameObjects = false;
 
 	// Must be called in order for callback functions
 	// to be called for registered events.
@@ -309,46 +270,39 @@ void Game::updateGame()
 	if (deltaTime >= FRAME_INTERVAL) {
 
 		// Update all gameObjects
-		this->updatingGameObjects = true;
+		SceneNode::updatingGameObjects = true;
 
-		for (auto thisGameObject : this->inGameObjects) {
-			thisGameObject->update(deltaTime);
+		for (auto gameObject : sceneNode.children) {
+
+			gameObject->update(deltaTime);
 		}
 
-		this->updatingGameObjects = false;
+		SceneNode::updatingGameObjects = false;
 
-		// Move any pending GameObject to this->inGameObjects
-		for (auto pending : pendingGameObjects) {
+		// Attach any pending game objects to their parent
+		for (auto pending : SceneNode::pendingChildren) {
 
-			// Initialize the pending GameObject and add it to the game
+			// Initialize the pending GameObject
 			pending->initialize();
 
-			this->inGameObjects.emplace_back(pending);
+			// Add the pending gameObject to the parent's child list
+			pending->sceneNode.parent->children.emplace_back(pending);
 		}
-		pendingGameObjects.clear();
+		SceneNode::pendingChildren.clear();
 
-		// Add any dead GameObjects to a temp vector
-		std::vector<GameObject*> deadGameObjects;
-
-		for (auto gameObject : this->inGameObjects) {
-			if (gameObject->getState() == GameObject::DEAD) {
-				deadGameObjects.emplace_back(gameObject);
-			}
+		// Delete dead game objects
+		for (auto gameObject : SceneNode::deadGameObjects) {
+			
+			// Delete the dead game object from the parent's child list
+			gameObject->sceneNode.parent->removeAndDeleteChild(gameObject);
 		}
 
-		// Delete dead game (which removes them from this->inGameObjects)
-		for (auto gameObject : deadGameObjects) {
-			delete gameObject;
-		}
-		deadGameObjects.clear();
+		// Clear the list for the next update cycle
+		SceneNode::deadGameObjects.clear();
 
-		// Temp
 		// Set the viewing transformation
 		mat4 viewingTransformation = glm::lookAt(vec3(0.0f, 5.0f, 20.0f), vec3(0.0f, 5.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-		//glUniformMatrix4fv(1, 1, GL_FALSE, glm::value_ptr(viewingTransformation));
 		SharedProjectionAndViewing::setViewMatrix(viewingTransformation);
-
-		SoundEngine::Update(deltaTime);
 
 		// Save current time to determine when the scene should be rendered next
 		lastRenderTime = currentTime;
@@ -364,7 +318,6 @@ void Game::renderScene()
 	for (auto mesh : this->meshComps) {
 
 		mesh->draw();
-
 	}
 
 	// flush all drawing commands and swap the front and back buffers
@@ -372,64 +325,12 @@ void Game::renderScene()
 
 } // end renderScene
 
-//********************* Game Object Management *****************************************
-
-void Game::addGameObject(GameObject* gameObject)
-{
-	// If updating gameObjects, need to add to pending
-	if (this->updatingGameObjects) {
-		pendingGameObjects.emplace_back(gameObject);
-	}
-	else {
-		this->inGameObjects.emplace_back(gameObject);
-	}
-
-} // end addGameObject
-
-void Game::removeGameObject(GameObject* gameObject)
-{
-	// Is it in pending gameObjects?
-	auto iter = std::find(pendingGameObjects.begin(), pendingGameObjects.end(), gameObject);
-
-	if (iter != pendingGameObjects.end()) {
-		// Swap to end of vector and pop off (avoid erase copies)
-		std::iter_swap(iter, pendingGameObjects.end() - 1);
-		pendingGameObjects.pop_back();
-	}
-
-	// Is it in this->inGameObjects?
-	iter = std::find(this->inGameObjects.begin(), this->inGameObjects.end(), gameObject);
-
-	if (iter != this->inGameObjects.end()) {
-		// Swap to end of vector and pop off (avoid erase copies)
-		std::iter_swap(iter, this->inGameObjects.end() - 1);
-		this->inGameObjects.pop_back();
-	}
-
-} // end removeGameObject
-
-
-void Game::removeAndDeleteGameObject(GameObject* gameObject)
-{
-	this->removeGameObject(gameObject);
-
-	delete gameObject;
-
-
-} // end removeAndDeleteGameObject
 
 GameObject* Game::findGameObjectByName(string name)
 {
-	for (auto i : this->inGameObjects) {
-		if (i->getName() == name) {
-			return i;
-		}
-	}
-	for (auto i : pendingGameObjects) {
-		if (i->getName() == name) {
-			return i;
-		}
-	}
+	// Traverse the scene graph to find a game object
+	// TODO
+	
 	return nullptr;
 }
 
@@ -450,14 +351,14 @@ void Game::removeMeshComp(MeshComponent* mesh)
 void Game::unloadData()
 {
 	// Delete gameObjects
-	while (!this->inGameObjects.empty()) {
+	while (!this->sceneNode.children.empty()) {
 
-		delete this->inGameObjects.back();
+		delete this->sceneNode.children.back();
 	}
 
-	while (!pendingGameObjects.empty()) {
+	while (!sceneNode.pendingChildren.empty()) {
 
-		delete pendingGameObjects.back();
+		delete sceneNode.pendingChildren.back();
 	}
 
 } // end unloadData
@@ -493,9 +394,9 @@ void Game::framebuffer_size_callback(GLFWwindow* window, int width, int height) 
 
 	glViewport(0, 0, width, height);
 
-	// Set the modeling transformation
+	// Set the projection transformation
 	glm::mat4 projectionTransformation = glm::perspective(PI / 4.0f, ((float)width) / height, 0.5f, 1000.0f);
-	//glUniformMatrix4fv(0, 1, GL_FALSE, glm::value_ptr(projectionTransformation));
+
 	SharedProjectionAndViewing::setProjectionMatrix(projectionTransformation);
 
 } // end framebuffer_size_callback
@@ -511,12 +412,6 @@ void Game::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 
 			// Stop the game loop
 			this->isRunning = false;
-
-			break;
-
-		case GLFW_KEY_R: 
-
-			roar->play(false);
 
 			break;
 

@@ -4,6 +4,8 @@
 #include "MathLibsConstsFuncs.h"
 #include <GLFW/glfw3.h>
 
+#include "SceneNode.h"
+
 static const int initialScreenWidth = 1024;
 static const int initialScreenHeight = 768;
 
@@ -51,27 +53,6 @@ public:
 	 * 			is false and the game ends.
 	 */
 	void gameLoop();
-
-	/**
-	 * @fn	void Game::removeGameObject(class GameObject* gameObject);
-	 *
-	 * @brief	Removes the game object described by gameObject from
-	 * 			the collection of game objects that are in the game.
-	 *
-	 * @param [in]	gameObject	If non-null, the game object being removed.
-	 */
-	void removeGameObject(class GameObject* gameObject);
-
-	/**
-	 * @fn	void Game::removeAndDeleteGameObject(GameObject* gameObject);
-	 *
-	 * @brief	Removes the game object described by gameObject from
-	 * 			the collection of game objects that are in the game
-	 * 			and deletes it.
-	 *
-	 * @param [in]	gameObject	If non-null, the game object being removed and deleted.
-	 */
-	void removeAndDeleteGameObject(GameObject* gameObject);
 
 	/**
 	 * @fn	void Game::addMeshComp(class MeshComponent* mesh);
@@ -156,12 +137,13 @@ public:
 	 */
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-
 	// Friend declaration give the GameObject class access to protected and 
 	// private members of the Game class.
 	friend GameObject;
 
 protected:
+
+	class SceneNode sceneNode;
 
 	/**
 	 * @fn	bool Game::initializeRenderWindow();
@@ -195,15 +177,6 @@ protected:
 	 * 			game objects are added to the game.
 	 */
 	virtual void loadData();
-
-	/**
-	 * @fn	void Game::addGameObject(class GameObject* gameObject);
-	 *
-	 * @brief	Adds a game object the game.
-	 *
-	 * @param [in]	gameObject	If non-null, the game object to be added.
-	 */
-	void addGameObject(class GameObject* gameObject);
 
 	/**
 	 * @fn	void Game::InitializeGameObjects();
@@ -244,18 +217,9 @@ protected:
 	 * 			components.
 	 */
 	virtual void unloadData();
-	
-	/** @brief	All the GameObjects in the game */
-	std::vector<class GameObject*> inGameObjects;
-
-	/** @brief	Any pending GameObjects */
-	std::vector<class GameObject*> pendingGameObjects;
 
 	/** @brief	True if the game is running, false if not */
 	bool isRunning = true;
-
-	/** @brief	Track if  gameObjects are being updated */
-	bool updatingGameObjects = false;
 
 	/** @brief	All mesh components that need to be rendered */
 	std::vector<class MeshComponent*> meshComps;

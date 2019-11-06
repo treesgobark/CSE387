@@ -2,24 +2,22 @@
 #include "MathLibsConstsFuncs.h"
 #include "Game.h"
 
+#include "SceneNode.h"
+
+
+/**
+ * @enum	State
+ *
+ * @brief	Values that represent states
+ * 			ACTIVE - Game object is updated and "rendered"
+ * 			PAUSED - Game object is not updated or "rendered"
+ * 			DEAD - Game object will be removed from the game.
+ */
+enum STATE { ACTIVE, PAUSED, DEAD };
+
 class GameObject
 {
 public:
-
-	/**
-	 * @enum	State
-	 *
-	 * @brief	Values that represent states
-	 * 			ACTIVE - Game object is updated and "rendered"  
-	 * 			PAUSED - Game object is not updated or "rendered"  
-	 * 			DEAD - Game object will be removed from the game.
-	 */
-	enum State
-	{
-		ACTIVE,
-		PAUSED,
-		DEAD
-	};
 
 	/**
 	 * @fn	GameObject::GameObject(class Game * game);
@@ -104,7 +102,19 @@ public:
 	 *
 	 * @returns	The state of the game object.
 	 */
-	State getState() const { return gameObjectState; }
+	STATE getState() const { return gameObjectState; }
+
+	/**
+	 * @fn	void setState(State state);
+	 *
+	 * @brief	Sets a state of the game object. Only ACTIVE game
+	 * 			objects are updated and rendered. When the state of 
+	 * 			an object is set to DEAD, it will be deleted on the
+	 * 			next update cycle.
+	 *
+	 * @param	state	The state to which the object is being set
+	 */
+	void setState(STATE state);
 
 	/**
 	 * @fn	string getName()
@@ -125,20 +135,14 @@ public:
 	 */
 	void setName(string name) { objectName = name; }
 
-	// Local transform that expresses the position, orientation,
-	// and scale of this game object relative to its parent.
-	mat4 localTransform = mat4(1.0f);
+	/**
+	 * @class	SceneNode
+	 *
+	 * @brief	A scene graph node.
+	 */
+	class SceneNode sceneNode;
 
 protected:
-
-	/**
-	 * @fn	void UpdateComponents(float deltaTime);
-	 *
-	 * @brief	Updates all the components attached to the GameObject (not overridable)
-	 *
-	 * @param	deltaTime	 time since the last update in seconds.
-	 */
-	void updateComponents(float deltaTime);
 
 	/**
 	 * @fn	virtual void UpdateGameObject(float deltaTime);
@@ -158,7 +162,7 @@ protected:
 	virtual void gameObjectInput();
 
 	/** @brief	Current state of the game object */
-	State gameObjectState;
+	STATE gameObjectState;
 
 	/** @brief	The components that are attached to this game object. */
 	std::vector<class Component*> components;

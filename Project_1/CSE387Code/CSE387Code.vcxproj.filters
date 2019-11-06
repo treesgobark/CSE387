@@ -62,9 +62,6 @@
     <ClInclude Include="Component.h">
       <Filter>Components</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleMoveComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="ModelMeshComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -88,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="SoundSourceComponent.h">
       <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="KinematicsComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneNode.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -130,9 +133,6 @@
     <ClCompile Include="ModelMeshComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleMoveComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
     <ClCompile Include="BuildShaderProgram.cpp">
       <Filter>Game</Filter>
     </ClCompile>
@@ -150,6 +150,12 @@
     </ClCompile>
     <ClCompile Include="SoundSourceComponent.cpp">
       <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="KinematicsComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneNode.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
