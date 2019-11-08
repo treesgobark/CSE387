@@ -122,6 +122,8 @@ public:
 	 */
 	virtual bool isMesh() override { return true; }
 
+	btCollisionShape* getCollisonShaper() { return this->collisionShape; }
+
 protected:
 
 	/**

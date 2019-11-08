@@ -11,6 +11,7 @@ layout(shared) uniform transformBlock
 	mat4 projectionMatrix;
 };
 
+
 out vec3 vertexWorldPosition;
 out vec3 vertexWorldNormal;
 out vec2 TexCoord;

@@ -158,14 +158,22 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <None Include="Shaders\vertexShader.vs.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoxMeshComponent.h" />
     <ClInclude Include="BuildShaderProgram.h" />
+    <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="gl3w.h" />
+    <ClInclude Include="glcorearb.h" />
+    <ClInclude Include="khrplatform.h" />
     <ClInclude Include="KinematicsComponent.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="MathLibsConstsFuncs.h" />
     <ClInclude Include="ModelMeshComponent.h" />
     <ClInclude Include="MeshComponent.h" />
+    <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SharedGeneralLighting.h" />
     <ClInclude Include="SharedMaterialProperties.h" />
@@ -179,6 +187,7 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoxMeshComponent.cpp" />
     <ClCompile Include="BuildShaderProgram.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -189,6 +198,8 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClCompile Include="MathLibsConstsFuncs.cpp" />
     <ClCompile Include="ModelMeshComponent.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
+    <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SharedGeneralLighting.cpp" />
     <ClCompile Include="SharedMaterialProperties.cpp" />

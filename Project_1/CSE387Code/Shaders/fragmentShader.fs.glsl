@@ -50,8 +50,8 @@ struct Material
 	int textureMode;
 	bool diffuseTextureEnabled;
 	bool specularTextureEnabled;
-	bool normalMapEnabled;
-	bool bumpMapEnabled;
+//	bool normalMapEnabled;
+//	bool bumpMapEnabled;
 };
 
 layout(shared) uniform MaterialBlock
@@ -66,6 +66,7 @@ layout(shared) uniform worldEyeBlock
 
 layout(location = 100) uniform sampler2D diffuseSampler;
 layout(location = 101) uniform sampler2D specularSampler;
+//layout(location = 102) uniform sampler2D normalMapSampler;
 
 in vec3 vertexWorldPosition;
 in vec3 vertexWorldNormal;
@@ -73,45 +74,16 @@ in vec2 TexCoord;
 
 out vec4 fragmentColor;
 
+vec3 shadingCaculation(GeneralLight light, Material object);
 vec3 fragmentWorldNormal;
-
-vec3 shadingCalculation(GeneralLight light, Material material) {
-	if (!light.enabled) return vec3(0.0);
-	float ambientIntensity = 0.2;
-	float diffuseIntensity = 1.0;
-	float specularIntensity = 0.1;
-
-	vec3 ambient = ambientIntensity * light.ambientColor.xyz * material.ambientMat.xyz;
-
-	vec3 lightVector = normalize(light.positionOrDirection.xyz);
-	vec3 lightDirection = vec3(0.0f);
-
-	if (light.positionOrDirection.w == 0.0f)
-		lightDirection = lightVector;
-	else
-		lightDirection = normalize(lightVector - vertexWorldPosition);
-	
-	float difference = max(dot(vertexWorldNormal, lightDirection), 0.0f);
-	vec3 diffuse = diffuseIntensity * difference * light.diffuseColor.xyz * material.diffuseMat.xyz;
-
-	vec3 viewingDirection = normalize(worldEyePosition - vertexWorldPosition);
-	vec3 reflectionDirection = reflect(-lightDirection, vertexWorldNormal);
-	float strength = pow(max(dot(viewingDirection, reflectionDirection), 0.0), 2);
-	vec3 specular = specularIntensity * strength * light.specularColor.xyz * material.specularMat.xyz;
-
-	if (!light.isSpot) return ambient + diffuse + specular;
-
-	float theta = dot(lightDirection, normalize(-light.spotDirection));
-	float epsilon = light.spotCutoffCos*.1;
-	float spotIntensity = clamp((theta - light.spotCutoffCos) / epsilon, 0.0, 1.0);
-	if (theta > light.spotCutoffCos) return ambient + spotIntensity * diffuse + spotIntensity * specular;
-	return ambient;
-}
 
 void main()
 {
-	// make copy of material properties that can be written to
+
+	// Make copy of material properties that can be written to
 	Material material = object;
+
+	fragmentWorldNormal = vertexWorldNormal;
 
 	// Substitute diffuse texture for ambient and diffuse material properties
 	if (material.diffuseTextureEnabled == true && material.textureMode != 0) {
@@ -126,21 +98,68 @@ void main()
 		material.specularMat = texture(specularSampler, TexCoord.st);
 	}
 
-	// Check if shading calculations should be performed
+	// Should shading calculations be performed
 	if (material.textureMode == 2 || material.textureMode == 0) {
 
 		fragmentColor = material.emmissiveMat;
 
 		for (int i = 0; i < MaxLights; i++) {
 
-			fragmentColor += vec4(shadingCalculation(lights[i], material), 1.0f);
+			fragmentColor += vec4(shadingCaculation(lights[i], material), 1.0);
 		}
 
 	}
 	else if (material.textureMode == 1) { // No shading calculations
 
 		fragmentColor = texture(diffuseSampler, TexCoord.st);
-}
-
+	}
 
 } // main
+
+
+vec3 shadingCaculation(GeneralLight light, Material object)
+{
+	vec3 totalFromThisLight = vec3(0.0, 0.0, 0.0);
+
+	if (light.enabled == true) {
+
+		// Calculate a bunch of vectors
+		vec3 lightVector;
+		if (light.positionOrDirection.w < 1) {
+			// Directional
+			lightVector = normalize(light.positionOrDirection.xyz);
+		}
+		else {
+			// Positional
+			lightVector = normalize(light.positionOrDirection.xyz -
+				vertexWorldPosition.xyz);
+		}
+
+		vec3 reflection = normalize(reflect(-lightVector, fragmentWorldNormal.xyz));
+		vec3 eyeVector = normalize(worldEyePosition - vertexWorldPosition.xyz);
+
+		float spotCosFGameObject = 0;
+		if (light.isSpot == true) {
+
+			spotCosFGameObject = dot(-lightVector, normalize(light.spotDirection));
+		}
+
+		// Is it a spot light and are we in the cone?
+		if (light.isSpot == false || (light.isSpot == true && spotCosFGameObject >= light.spotCutoffCos)) {
+
+			// Ambient Reflection
+			totalFromThisLight += object.ambientMat.xyz * light.ambientColor.xyz;
+
+			// Difuse Reflection
+			totalFromThisLight += max(dot(fragmentWorldNormal.xyz, lightVector), 0) *
+				object.diffuseMat.xyz * light.diffuseColor.xyz;
+
+			// Specular Reflection
+			totalFromThisLight += pow(max(dot(reflection, eyeVector), 0), object.specularExp) *
+				object.specularMat.xyz * light.specularColor.xyz;
+		}
+	}
+
+	return totalFromThisLight;
+
+} // end shadingCaculation

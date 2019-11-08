@@ -11,6 +11,9 @@
 #include "SharedProjectionAndViewing.h"
 #include "BuildShaderProgram.h"
 
+#include "SoundEngine.h"
+#include "PhysicsEngine.h"
+
 //********************* Static Function declarations *****************************************
 
 void glfw_error_callback(int error, const char* description);
@@ -47,7 +50,8 @@ Game::Game(std::string windowTitle)
 
 Game::~Game()
 {
-
+	SoundEngine::Stop();
+	PhysicsEngine::Stop();
 } // end Game Destructor
 
 bool Game::initialize()
@@ -55,6 +59,10 @@ bool Game::initialize()
 	bool windowInit = initializeRenderWindow();
 
 	bool graphicsInit = initializeGraphics();
+
+	bool soundInit = SoundEngine::Init();
+
+	bool physicsInit = PhysicsEngine::Init();
 
 	if (windowInit && graphicsInit) {
 
@@ -268,6 +276,8 @@ void Game::updateGame()
 	}
 
 	if (deltaTime >= FRAME_INTERVAL) {
+
+		PhysicsEngine::Update(deltaTime);
 
 		// Update all gameObjects
 		SceneNode::updatingGameObjects = true;
