@@ -96,6 +96,14 @@ void SharedProjectionAndViewing::setProjectionMatrix( glm::mat4 projectionMatrix
 		glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	}
 
+	/* ??????????????
+	float widht = viewWidth*getWidth()-400;
+	float height = viewHeight*getHEight();
+	float lowerX = xLowerLeft*getWidht();
+	float lowerY yLowerLeft*getHeight();
+	SharedProjection::setProjection(
+	*/
+
 } // end setProjectionMatrix
 
 
