@@ -211,6 +211,8 @@ public:
 	 */
 	void removeAndDeleteChild(class GameObject* gameObject);
 
+	void rotateTo(const glm::vec3& direction, Frame frame);
+
 	protected:
 
 	///** @brief	All the GameObjects attached to this scene graph node */

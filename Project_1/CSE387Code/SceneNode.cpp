@@ -180,3 +180,35 @@ void SceneNode::removeAndDeleteChild(GameObject* gameObject)
 
 } // end removeAndDeleteGameObject
 
+void rotateTo(const glm::vec3& direction, Frame frame) {
+	// Normalize the new direction
+	vec3 newDirection = glm::normalize(direction);
+
+	if (frame == WORLD) {
+
+		// Transform the direction to local coordinates
+		newDirection = (glm::inverse(getParentWorldTransform()) * glm::vec4(newDirection, 0.0f)).xyz;
+	}
+
+	// Find the perpendicular vector to rotate about
+	glm::vec3 axis = glm::cross(FORWARD, newDirection);
+
+	// Check if direction is equal to FORWARD
+	if (glm::length(axis) == 0.0f) {
+
+		setRotation(mat3(1.0f), LOCAL);
+	}
+	else {
+
+		// Find the angle to rotate between the current direction and the new direction
+		float angle = glm::acos(glm::dot(FORWARD, newDirection));
+
+		// Set the local orientation
+		mat3 localRot = mat3(glm::rotate(angle, axis));
+
+		// Set the local transformation
+		setRotation(localRot, LOCAL);
+	}
+
+} // end rotateTo
+

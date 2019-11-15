@@ -110,3 +110,13 @@ void RigidBodyComponent::setWorldTransform(const btTransform &worldTrans)
 }
 
 
+
+void RigidBodyComponent::CollisionEnter(const RigidBodyComponent* collisionData) const
+{
+	std::vector<class Component*> buddies = owningGameObject->getComponents();
+	
+	for (auto bud : buddies) {
+		bud->CollisionEnter(collisionData);
+	}
+}
+

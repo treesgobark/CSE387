@@ -2,9 +2,13 @@
 
 #include "GameObject.h"
 
+enum COMPONENT_TYPE { COMPONENT = 0, COLLISION = 1};
+
 class Component
 {
 public:
+
+	virtual COMPONENT_TYPE getComponentType() { return COMPONENT;  }
 
 	/**
 	 * @fn	Component::Component(int updateOrder = 100);
