@@ -15,7 +15,6 @@
 #include "PhysicsEngine.h"
 #include "CameraComponent.h"
 #include "BoxMeshComponent.h"
-#include "SceneNode.cpp"
 
 //********************* Static Function declarations *****************************************
 
@@ -197,33 +196,28 @@ bool Game::initializeGraphics()
 	 ModelMeshComponent * dino1 = new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram);
 	 dinoGameObject->addComponent(dino1);
 
-	 dinoGameObject = new GameObject(this);
-	 this->addChild(dinoGameObject);
-
-	 GameObject* emptyGameObject = new GameObject(this);
-	 dinoGameObject->addChild(emptyGameObject);
-	 emptyGameObject->sceneNode.setRotation(glm::rotate(PI, UNIT_Y_V3), WORLD);
-	 ModelMeshComponent* dino1 = new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram);
-	 rg = new RigidBodyComponent(dino1, DYNAMIC);
-	 emptyGameObject->addComponent(dino1);
-	 emptyGameObject->addComponent(rg);
-	 //emptyGameObject->addComponent(new SimpleMoveComponent());
-
-	 GameObject* boxGameObject = new GameObject(this);
-	 addChild(boxGameObject);
-	 boxGameObject->sceneNode.setPosition(vec3(5.5f, -3.0f, 0.0f));
-
-	 BoxMeshComponent* platform = new BoxMeshComponent(new Material(), 10.0f, 0.1f, 10.0f);
-	 boxGameObject->addComponent(platform);
-	 boxGameObject->addComponent(new RigidBodyComponent(platform, KINEMATIC_STATIONARY));
-
-	 GameObject* cameraGameObject = new GameObject(this);
-	 this->addChild(cameraGameObject);
-	 cameraGameObject->sceneNode.setPosition(vec3(0.0f, 5.0f, 20.0f), WORLD);
-
 	 CameraComponent* camera = new CameraComponent();
 	 camera->setViewPort(0.0, 0.0, 1.0, 1.0); // full screen
-	 cameraGameObject->addComponent(camera);
+
+	 //dinoGameObject = new GameObject(this);
+	 //this->addChild(dinoGameObject);
+
+	 //GameObject* emptyGameObject = new GameObject(this);
+	 //dinoGameObject->addChild(emptyGameObject);
+	 //emptyGameObject->sceneNode.setRotation(glm::rotate(PI, UNIT_Y_V3), WORLD);
+	 //ModelMeshComponent* dino1 = new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram);
+	 //rg = new RigidBodyComponent(dino1, DYNAMIC);
+	 //emptyGameObject->addComponent(dino1);
+	 //emptyGameObject->addComponent(rg);
+	 ////emptyGameObject->addComponent(new SimpleMoveComponent());
+
+	 //GameObject* boxGameObject = new GameObject(this);
+	 //addChild(boxGameObject);
+	 //boxGameObject->sceneNode.setPosition(vec3(5.5f, -3.0f, 0.0f));
+
+	 //BoxMeshComponent* platform = new BoxMeshComponent(new Material(), 10.0f, 0.1f, 10.0f);
+	 //boxGameObject->addComponent(platform);
+	 //boxGameObject->addComponent(new RigidBodyComponent(platform, KINEMATIC_STATIONARY));
 
 	 //GameObject* sphereGameObject = new GameObject(this);
 	 //sceneNode.addChild(sphereGameObject);
@@ -356,10 +350,15 @@ void Game::renderScene()
 	// clear the both the color and depth buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (auto mesh : this->meshComps) {
-
-		mesh->draw();
+	for (auto camera : CameraComponent::activeCameras) {
+		if (camera->isActive) {
+			camera->setViewingTransformation();
+			for (auto mesh : this->meshComps) {
+				mesh->draw();
+			}
+		}
 	}
+
 
 	// flush all drawing commands and swap the front and back buffers
 	glfwSwapBuffers(renderWindow);

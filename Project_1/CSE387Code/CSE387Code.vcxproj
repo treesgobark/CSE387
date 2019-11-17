@@ -191,6 +191,7 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
   <ItemGroup>
     <ClCompile Include="BoxMeshComponent.cpp" />
     <ClCompile Include="BuildShaderProgram.cpp" />
+    <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />

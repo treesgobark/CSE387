@@ -77,7 +77,7 @@ class RigidBodyComponent : 	public Component, public btMotionState
 	 *
 	 * @param	collisionData	Information describing the collision.
 	 */
-	void CollisionEnter( const RigidBodyComponent * collisionData ) const { std::cout << "CollisionEnter" << std::endl; }
+	void CollisionEnter(const RigidBodyComponent* collisionData) const;
 
 	/**
 	 * @fn	void RigidBodyComponent::CollisionExit( const RigidBodyComponent * collisionData ) const
@@ -86,7 +86,7 @@ class RigidBodyComponent : 	public Component, public btMotionState
 	 *
 	 * @param	collisionData	Information describing the collision.
 	 */
-	void CollisionExit( const RigidBodyComponent * collisionData ) const { std::cout << "CollisionExit" << std::endl; }
+	void CollisionExit(const RigidBodyComponent* collisionData) const;
 
 	/**
 	 * @fn	void RigidBodyComponent::initialize() override;

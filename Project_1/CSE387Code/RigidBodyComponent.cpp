@@ -9,11 +9,15 @@ RigidBodyComponent::RigidBodyComponent(MeshComponent* meshComponent, DynamicsSta
 
 }
 
+void RigidBodyComponent::CollisionExit(const RigidBodyComponent* collisionData) const
+{
+}
+
 void RigidBodyComponent::initialize()
 {
 	// Get the collision shape for the mesh component after the mesh component has been
 	// initialized. If does not exist until after this has been completed.
-	this->bulletCollisionShape = meshComponent->getCollisionShape();
+	// this->bulletCollisionShape = meshComponent->getCollisionShape();
 
 	// Get the scale value to use in scaling the mesh.
 	glm::vec3 scale = getScaleFromTransform(this->owningGameObject->sceneNode.getScale(WORLD));
@@ -116,7 +120,7 @@ void RigidBodyComponent::CollisionEnter(const RigidBodyComponent* collisionData)
 	std::vector<class Component*> buddies = owningGameObject->getComponents();
 	
 	for (auto bud : buddies) {
-		bud->CollisionEnter(collisionData);
+		// bud->CollisionEnter(collisionData);
 	}
 }
 

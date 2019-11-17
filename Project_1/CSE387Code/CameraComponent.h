@@ -64,6 +64,8 @@ public:
 	 */
 	void setDepth(int depth);
 
+	bool isActive = true;
+
 	/**
 	 * @brief	Vector containing the Cameras that are enabled. The vector should be sorted based
 	 * 			upon the depth values of the cameras. Figure out how to the use STL sort method to

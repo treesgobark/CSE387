@@ -202,5 +202,8 @@
     <ClCompile Include="WaypointComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

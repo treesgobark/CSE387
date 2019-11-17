@@ -1,5 +1,4 @@
 #include "SceneNode.h"
-
 #include "GameObject.h"
 
 
@@ -180,14 +179,15 @@ void SceneNode::removeAndDeleteChild(GameObject* gameObject)
 
 } // end removeAndDeleteGameObject
 
-void rotateTo(const glm::vec3& direction, Frame frame) {
+void SceneNode::rotateTo(const glm::vec3& direction, Frame frame)
+{
 	// Normalize the new direction
 	vec3 newDirection = glm::normalize(direction);
 
 	if (frame == WORLD) {
 
 		// Transform the direction to local coordinates
-		newDirection = (glm::inverse(getParentWorldTransform()) * glm::vec4(newDirection, 0.0f)).xyz;
+		newDirection = (glm::inverse(this->getParentWorldTransform()) * glm::vec4(newDirection, 0.0f)).xyz;
 	}
 
 	// Find the perpendicular vector to rotate about
@@ -209,6 +209,4 @@ void rotateTo(const glm::vec3& direction, Frame frame) {
 		// Set the local transformation
 		setRotation(localRot, LOCAL);
 	}
-
 } // end rotateTo
-
