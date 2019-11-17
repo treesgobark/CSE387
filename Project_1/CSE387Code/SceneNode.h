@@ -6,11 +6,6 @@ class SceneNode
 {
 public:
 
-	// Give the Game and GameObject classed direct access to the protected and private data
-	// members of this class.
-	friend class Game;
-	friend class GameObject;
-
 	/**
 	 * @fn	glm::vec3 SceneNode::getPosition(Frame frame = LOCAL);
 	 *
@@ -212,6 +207,65 @@ public:
 	void removeAndDeleteChild(class GameObject* gameObject);
 
 	void rotateTo(const glm::vec3& direction, Frame frame);
+
+	/**
+	 * @fn	void SceneGraphNode::updateSceneGraph(float deltaTime);
+	 *
+	 * @brief	Updates the scene graph under the assumption that the
+	 * 			SceneGraphNode through which the method was called is the
+	 * 			root of the scene graph. Could possibly be used to update
+	 * 			just a sub-branch of the scene graph.
+	 *
+	 * @param	deltaTime	The time in seconds since the last update
+	 */
+	void updateSceneGraph(float deltaTime);
+
+	/**
+	 * @fn	SceneNode* SceneNode::getParent()
+	 *
+	 * @brief	Gets the parent of this SceneGraphNode
+	 *
+	 * @returns	Null if the node does not have a parent, else the parent.
+	 */
+	SceneNode* getParent() { return this->parent; }
+
+	/**
+	 * @fn	void SceneNode::setParent(SceneNode* parent)
+	 *
+	 * @brief	Sets the parent of this SceneGraphNode.
+	 *
+	 * @param [in]	parent	the new parent of the SceneGraphNode
+	 */
+	void setParent(SceneNode* parent) { this->parent = parent; }
+
+	/**
+	 * @fn	std::vector<class GameObject*> SceneGraphNode::getChildren() const
+	 *
+	 * @brief	Gets the children of this SceneGraphNode
+	 *
+	 * @returns	Null if it fails, else the children.
+	 */
+	std::vector<class GameObject*> getChildren() const
+	{
+		return children;
+	}
+	
+	/**
+	 * @fn	static void SceneGraphNode::designateDeadGameObject( GameObject * gameObject )
+	 *
+	 * @brief	Used to designate dead game object that should be removed
+	 * 			from the game after the next update cycle has completed.
+	 *
+	 * @param [in,out]	gameObject	If non-null, the game object.
+	 */
+	static void designateDeadGameObject(GameObject* gameObject)
+	{
+		// Add this dead game object to static list of game objects
+		// to be deleted after the next update cycle.
+		SceneNode::deadGameObjects.emplace_back(gameObject);
+	}
+
+
 
 	protected:
 

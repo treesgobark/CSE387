@@ -16,16 +16,19 @@ GameObject::GameObject(Game * game)
 GameObject::~GameObject()
 {
 	// Remove the game object from the game
-	sceneNode.parent->removeChild(this);
+	sceneNode.getParent()->removeChild(this);
 
 	// Need to delete components
 	while (!components.empty()) {
-
-			delete components.back();
+		// Check if this Component is a Mesh 
+		if (components.back()->isMesh() == true) {
+			this->owningGame->removeMeshComp(dynamic_cast<MeshComponent*>(components.back()));
+		}
+		delete components.back();
 	}
 
 	// Delete all children
-	for (GameObject* child : sceneNode.children) {
+	for (GameObject* child : sceneNode.getChildren()) {
 
 		delete child;
 	}
@@ -42,7 +45,7 @@ void GameObject::initialize()
 	}
 
 	// Initialize all children
-	for (auto child : sceneNode.children) {
+	for (auto child : sceneNode.getChildren()) {
 		child->initialize();
 	}
 
@@ -64,7 +67,7 @@ void GameObject::update(float deltaTime)
 		updateGameObject(deltaTime);
 
 		// Update all children
-		for (auto child : this->sceneNode.children) {
+		for (auto child : this->sceneNode.getChildren()) {
 			child->update(deltaTime);
 		}
 	}
@@ -91,7 +94,7 @@ void GameObject::processInput()
 		gameObjectInput();
 
 		// Process input for children
-		for (auto child : this->sceneNode.children) {
+		for (auto child : this->sceneNode.getChildren()) {
 			child->processInput();
 		}
 	}
@@ -131,6 +134,16 @@ void GameObject::addComponent(Component* component)
 	// Inserts element before position of iterator
 	components.insert(iter, component);
 
+	// Initialize only if the gameObject is already in the
+	// scene graph and the game has been initialized.
+	if (this->sceneNode.getParent() != nullptr &&
+		owningGame->getGameInitializationComplete() == true) {
+
+		// Adding a new component to a game object that is already in 
+		// the scene graph and initialized.
+		component->initialize();
+	}
+
 } // end addComponent
 
 
@@ -160,7 +173,28 @@ void GameObject::setState(STATE state)
 
 		// Add the this dead game object to static list of game objects
 		// to be deleted on the next update cycle.
-		SceneNode::deadGameObjects.emplace_back(this);
+		SceneNode::designateDeadGameObject(this);
 
 	}
+}
+
+void GameObject::addChild(GameObject* child)
+{
+	this->sceneNode.addChild(child);
+
+	if (getOwningGame()->getGameInitializationComplete() == true) {
+
+		child->initialize();
+
+	}
+}
+
+void GameObject::removeChild(GameObject* child)
+{
+	this->sceneNode.removeChild(child);
+}
+
+void GameObject::removeAndDeleteChild(GameObject* child)
+{
+	child->setState(DEAD);
 }

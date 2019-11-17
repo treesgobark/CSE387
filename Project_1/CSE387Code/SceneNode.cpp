@@ -1,5 +1,6 @@
 #include "SceneNode.h"
 #include "GameObject.h"
+#include "MeshComponent.h"
 
 
 // ***** Definitions of static data members that are shared by all SceneNode objects ****
@@ -14,32 +15,46 @@ std::vector<class GameObject*> SceneNode::pendingChildren;
 
 glm::vec3 SceneNode::getPosition(Frame frame)
 {
-	glm::vec3 position;
+	// apparently referencing parent in any way throws an access violation for some reason
+	//if (frame == WORLD) {
+	//	if (!parent) return getPosition();
+	//	return parent->getPosition(WORLD) + getPosition();
+	//}
 
-	return position;
+	//float scalingFactor = getScale()[0][0];
+
+	//mat4 rotationMat = getRotation();
+
+	return vec3(0.0f);
 
 } // end getPosition
 
 glm::mat4 SceneNode::getRotation(Frame frame)
 {
-	// TODO
-
-	return glm::mat4(1.0f);
-
+	// apparently referencing parent in any way throws an access violation for some reason
+	//if (frame == WORLD) {
+	//	if (!parent) return getRotation();
+	//}
+	return (1.0f / scale[0][0]) * localTransform;
 } // getRotation
 
 glm::mat4 SceneNode::getScale(Frame frame)
 {
-	// TODO
-
-	return glm::mat4(1.0f);
-
+	// apparently referencing parent in any way throws an access violation for some reason
+	//if (frame == WORLD) {
+	//	if (!parent) return scale;
+	//	return parent->getScale(WORLD) * scale;
+	//}
+	return glm::scale(vec3(sqrt(localTransform[0][0] * localTransform[0][0] + localTransform[1][1] * localTransform[1][1] + localTransform[2][2] * localTransform[2][2])));
 } // end getScale
 
 
 glm::mat4 SceneNode::getTransformation(Frame frame)
 {
-	// TODO
+	// apparently referencing parent in any way throws an access violation for some reason
+	if (frame == WORLD) {
+		//if (getParent() == NULL) return getTransformation();
+	}
 
 	return glm::mat4(1.0f);
 
@@ -104,9 +119,10 @@ glm::vec3 SceneNode::getRightDirection(Frame frame)
 
 glm::mat4 SceneNode::getParentWorldTransform()
 {
-	// TODO
+	// apparently referencing parent in any way throws an access violation for some reason
+	if (parent) return parent->getTransformation(WORLD);
 
-	return glm::mat4(1.0f);
+	return getTransformation();
 
 } // end getParentWorldTransform
 
@@ -120,7 +136,9 @@ glm::mat4 SceneNode::getModelingTransformation()
 
 void SceneNode::reparent(GameObject* child)
 {
-	// TODO
+	// Remove the child for its old parent's list of children
+	child->sceneNode.getParent()->removeChild(child);
+	addChild(child);
 
 } // end reparent
 
@@ -139,11 +157,22 @@ void SceneNode::addChild(GameObject* gameObject)
 	}
 	else {
 
-		// Initialize the game object and add to the
-		// child list of the parent
-		gameObject->initialize();
+		// add to the child list of the parent
 		this->children.emplace_back(gameObject);
 	}
+
+	// Search for any mesh components to make sure the have been added to the scene
+	// graph. This is necessary because of the possibility of reparenting.
+	for (auto comp : gameObject->getComponents()) {
+
+		// Check if this Component is a Mesh 
+		if (comp->isMesh() == true) {
+
+			gameObject->getOwningGame()->addMeshComp(dynamic_cast<MeshComponent*>(comp));
+
+		}
+	}
+
 
 } // end addGameObject
 
@@ -166,6 +195,16 @@ void SceneNode::removeChild(GameObject* gameObject)
 		// Swap to end of vector and pop off (avoid erase copies)
 		std::iter_swap(iter, this->children.end() - 1);
 		this->children.pop_back();
+	}
+
+	// Search for any mesh components to keep them from rendering
+	// and remove them to keep them from rendering.
+	for (auto comp : gameObject->getComponents()) {
+
+		// Check if this Component is a Mesh 
+		if (comp->isMesh() == true) {
+			gameObject->getOwningGame()->removeMeshComp(dynamic_cast<MeshComponent*>(comp));
+		}
 	}
 
 } // end removeGameObject
@@ -210,3 +249,44 @@ void SceneNode::rotateTo(const glm::vec3& direction, Frame frame)
 		setRotation(localRot, LOCAL);
 	}
 } // end rotateTo
+
+void SceneNode::updateSceneGraph(float deltaTime)
+{
+	// Update all gameObjects
+	SceneNode::updatingGameObjects = true;
+
+	// Update all the game objects in the game
+	for (auto gameObject : this->children) {
+
+		gameObject->processInput();
+	}
+
+	for (auto gameObject : this->children) {
+
+		gameObject->update(deltaTime);
+	}
+
+	SceneNode::updatingGameObjects = false;
+
+	// Attach any pending game objects to their parent
+	for (auto pending : SceneNode::pendingChildren) {
+
+		// Add the pending gameObject to the parent's child list
+		pending->sceneNode.parent->children.emplace_back(pending);
+	}
+	SceneNode::pendingChildren.clear();
+
+	// Delete dead game objects
+	for (auto gameObject : SceneNode::deadGameObjects) {
+
+		// Delete the dead game object from the parent's child list
+		gameObject->sceneNode.parent->removeAndDeleteChild(gameObject);
+
+		delete gameObject;
+	}
+
+	// Clear the list for the next update cycle
+	SceneNode::deadGameObjects.clear();
+
+} // end updateSceneGraph
+

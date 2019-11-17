@@ -23,7 +23,7 @@
     <ProjectGuid>{53B951F2-CCFA-4F31-BC9D-3E9B40E55E03}</ProjectGuid>
     <RootNamespace>CSE387Code</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CSE387Lab</ProjectName>
+    <ProjectName>CSE387Project2</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -158,17 +158,14 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <None Include="Shaders\vertexShader.vs.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BoxMeshComponent.h" />
     <ClInclude Include="BuildShaderProgram.h" />
     <ClInclude Include="CameraComponent.h" />
-    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="gl3w.h" />
     <ClInclude Include="glcorearb.h" />
     <ClInclude Include="khrplatform.h" />
-    <ClInclude Include="KinematicsComponent.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="MathLibsConstsFuncs.h" />
     <ClInclude Include="ModelMeshComponent.h" />
@@ -186,18 +183,14 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClInclude Include="SoundReverbZoneComponent.h" />
     <ClInclude Include="SoundSourceComponent.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="WaypointComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BoxMeshComponent.cpp" />
     <ClCompile Include="BuildShaderProgram.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
-    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="gl3w.c" />
-    <ClCompile Include="KinematicsComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathLibsConstsFuncs.cpp" />
     <ClCompile Include="ModelMeshComponent.cpp" />
@@ -215,7 +208,6 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClCompile Include="SoundReverbZoneComponent.cpp" />
     <ClCompile Include="SoundSourceComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="WaypointComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

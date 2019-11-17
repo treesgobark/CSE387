@@ -15,6 +15,7 @@
 #include "PhysicsEngine.h"
 #include "CameraComponent.h"
 #include "BoxMeshComponent.h"
+#include "SoundSourceComponent.h"
 
 //********************* Static Function declarations *****************************************
 
@@ -54,6 +55,11 @@ Game::~Game()
 {
 	SoundEngine::Stop();
 	PhysicsEngine::Stop();
+	
+	// Delete gameObjects
+	while (!this->sceneNode.getChildren().empty()) {
+		delete this->sceneNode.getChildren().back();
+	}
 } // end Game Destructor
 
 bool Game::initialize()
@@ -188,16 +194,22 @@ bool Game::initializeGraphics()
 	 SharedGeneralLighting::setEnabled(GL_LIGHT_ZERO, true);
 
 	 GameObject* emptyGameObject = new GameObject(this);
-	 sceneNode.addChild(emptyGameObject);
+	 this->addChild(emptyGameObject);
 	 sceneNode.setPosition(vec3(0.0f, 0.0f, -10.0f), WORLD);
 
 	 GameObject* dinoGameObject = new GameObject(this);
-	 emptyGameObject->sceneNode.addChild(dinoGameObject);
+	 emptyGameObject->addChild(dinoGameObject);
 	 ModelMeshComponent * dino1 = new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram);
 	 dinoGameObject->addComponent(dino1);
 
-	 CameraComponent* camera = new CameraComponent();
-	 camera->setViewPort(0.0, 0.0, 1.0, 1.0); // full screen
+	 CameraComponent* camera1 = new CameraComponent();
+	 camera1->setViewPort(0.0, 0.0, 0.5, 1.0); // full screen
+
+	 CameraComponent* camera2 = new CameraComponent();
+	 camera2->setViewPort(0.5, 0.0, 1.0, 1.0); // full screen
+
+	 SoundSourceComponent* dinoSound = new SoundSourceComponent("Assets/Footsteps.wav");
+	 dinoGameObject->addComponent(dinoSound);
 
 	 //dinoGameObject = new GameObject(this);
 	 //this->addChild(dinoGameObject);
@@ -233,10 +245,12 @@ bool Game::initializeGraphics()
 
 void Game::initializeGameObjects()
 {
-	for (auto gameObject : sceneNode.children) {
+	for (auto gameObject : sceneNode.getChildren()) {
 
 		gameObject->initialize();
 	}
+
+	gameInitializationComplete = true;
 
 } // end initializeGameObjects
 
@@ -256,7 +270,7 @@ void Game::bindCallBacks()
 void Game::gameLoop()
 {
 	while (isRunning) {
-		processInput();
+		//processInput();
 		updateGame();
 		renderScene();
 	}
@@ -271,22 +285,22 @@ https://www.glfw.org/docs/latest/group__input.html
 https://www.glfw.org/docs/latest/group__keys.html
 
 */
-void Game::processInput()
-{
-	SceneNode::updatingGameObjects = true;
+//void Game::processInput()
+//{
+	//SceneNode::updatingGameObjects = true;
 
-	// Update all the game objects in the game
-	for (auto gameObject : sceneNode.children) {
-	//for (auto gameObject : this->inGameObjects) {
-		gameObject->processInput();
-	}
-	SceneNode::updatingGameObjects = false;
+	//// Update all the game objects in the game
+	//for (auto gameObject : sceneNode.children) {
+	////for (auto gameObject : this->inGameObjects) {
+	//	gameObject->processInput();
+	//}
+	//SceneNode::updatingGameObjects = false;
 
-	// Must be called in order for callback functions
-	// to be called for registered events.
-	glfwPollEvents();
+	//// Must be called in order for callback functions
+	//// to be called for registered events.
+	//glfwPollEvents();
 
-}  //  end processInput
+//}  //  end processInput
 
 
 void Game::updateGame()
@@ -302,42 +316,16 @@ void Game::updateGame()
 
 	if (deltaTime >= FRAME_INTERVAL) {
 
-		PhysicsEngine::Update(deltaTime);
+		// Must be called in order for callback functions
+		// to be called for registered events.
+		glfwPollEvents();
 
-		// Update all gameObjects
-		SceneNode::updatingGameObjects = true;
+		// Update the scene graph. The sceneGraphNode held by the game is the root.
+		this->sceneNode.updateSceneGraph(deltaTime);
 
-		for (auto gameObject : sceneNode.children) {
-
-			gameObject->update(deltaTime);
-		}
-
-		SceneNode::updatingGameObjects = false;
-
-		// Attach any pending game objects to their parent
-		for (auto pending : SceneNode::pendingChildren) {
-
-			// Initialize the pending GameObject
-			pending->initialize();
-
-			// Add the pending gameObject to the parent's child list
-			pending->sceneNode.parent->children.emplace_back(pending);
-		}
-		SceneNode::pendingChildren.clear();
-
-		// Delete dead game objects
-		for (auto gameObject : SceneNode::deadGameObjects) {
-			
-			// Delete the dead game object from the parent's child list
-			gameObject->sceneNode.parent->removeAndDeleteChild(gameObject);
-		}
-
-		// Clear the list for the next update cycle
-		SceneNode::deadGameObjects.clear();
-
-		// Set the viewing transformation
-		mat4 viewingTransformation = glm::lookAt(vec3(0.0f, 5.0f, 20.0f), vec3(0.0f, 5.0f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
-		SharedProjectionAndViewing::setViewMatrix(viewingTransformation);
+		// Updates the FMOD system based on the current position and orientations
+		// of the SoundSources and SoundListeners
+		SoundEngine::Update(deltaTime);
 
 		// Save current time to determine when the scene should be rendered next
 		lastRenderTime = currentTime;
@@ -367,40 +355,40 @@ void Game::renderScene()
 
 
 GameObject* Game::findGameObjectByName(string name)
-{
-	// Traverse the scene graph to find a game object
-	// TODO
-	
+{	
 	return nullptr;
 }
 
 void Game::addMeshComp(MeshComponent* mesh)
 {
-	meshComps.emplace_back(mesh);
-}
+	// See if the mess component has already been added to the list
+	auto iter = std::find(meshComps.begin(), meshComps.end(), mesh);
+
+	// If it was not added previously, add it now.
+	if (iter == meshComps.end()) {
+
+		meshComps.emplace_back(mesh);
+
+	}
+
+} // end addMeshComp
 
 void Game::removeMeshComp(MeshComponent* mesh)
 {
 	auto iter = std::find(meshComps.begin(), meshComps.end(), mesh);
-	meshComps.erase(iter);
 
+	if (iter != meshComps.end()) {
+
+		// Swap to end of vector and pop off (avoid erase copies)
+		std::iter_swap(iter, meshComps.end() - 1);
+		meshComps.pop_back();
+	}
 }
 
 //********************* Shutdown Methods *****************************************
 
 void Game::unloadData()
 {
-	// Delete gameObjects
-	while (!this->sceneNode.children.empty()) {
-
-		delete this->sceneNode.children.back();
-	}
-
-	while (!sceneNode.pendingChildren.empty()) {
-
-		delete sceneNode.pendingChildren.back();
-	}
-
 } // end unloadData
 
 
@@ -448,21 +436,57 @@ void Game::key_callback(GLFWwindow* window, int key, int scancode, int action, i
 
 		switch (key) {
 
-		case GLFW_KEY_ESCAPE :
+		case GLFW_KEY_ESCAPE:
 
 			// Stop the game loop
 			this->isRunning = false;
 
 			break;
 
+		case GLFW_KEY_1:
+
+			CameraComponent::activeCameras.front()->isActive = false;
+			CameraComponent::activeCameras.back()->isActive = true;
+
+			break;
+
+		case GLFW_KEY_2:
+
+			CameraComponent::activeCameras.front()->isActive = true;
+			CameraComponent::activeCameras.back()->isActive = false;
+
+			break;
+
 		default:
 
 			fprintf(stdout, "key pressed\n");
+
+			break;
 		}
 	}
 
 } // end key_callback
 
+void Game::addChild(GameObject* child)
+{
+	this->sceneNode.addChild(child);
+
+	if (getGameInitializationComplete() == true) {
+
+		child->initialize();
+
+	}
+}
+
+void Game::removeChild(GameObject* child)
+{
+	this->sceneNode.removeChild(child);
+}
+
+void Game::removeAndDeleteChild(GameObject* child)
+{
+	child->setState(DEAD);
+}
 
 //********************* static function definitions *****************************************
 

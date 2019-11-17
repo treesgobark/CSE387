@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "SceneNode.h"
+#include "GameObject.h"
 
 static const int initialScreenWidth = 1024;
 static const int initialScreenHeight = 768;
@@ -17,6 +18,10 @@ class Game
 
 public:
 
+	int getWindowWidth() { return initialScreenWidth; }
+
+	int getWindowHeight() { return initialScreenHeight; }
+
 	/**
 	 * @fn	Game::Game(std::string windowTitle = "CSE387");
 	 *
@@ -24,7 +29,7 @@ public:
 	 *
 	 * @param	windowTitle	(Optional) title for the rendering window.
 	 */
-	Game(std::string windowTitle = "CSE387");
+	Game(std::string windowTitle = "Project 2");
 
 	/**
 	 * @fn	Game::~Game();
@@ -141,7 +146,26 @@ public:
 	// private members of the Game class.
 	friend GameObject;
 
+	/**
+	 * @fn	bool Game::getGameInitializationComplete()
+	 *
+	 * @brief	Gets game initialization complete
+	 *
+	 * @returns	True if the game has started and been initialized. False otherwise.
+	 */
+	bool getGameInitializationComplete() { return gameInitializationComplete; }
+
+	void addChild(GameObject* child);
+
+	void removeChild(GameObject* child);
+
+	void removeAndDeleteChild(GameObject* child);
+
 protected:
+
+	/** @brief	False until after the game has been initialized. When true
+	 newly instantiated game objects and components must be initialized. */
+	bool gameInitializationComplete = false;
 
 	class SceneNode sceneNode;
 
@@ -194,7 +218,7 @@ protected:
 	 * @brief	Process the input and passes it to the game objects and
 	 * 			componenets that are in the game.
 	 */
-	virtual void processInput();
+	//virtual void processInput();
 
 	/**
 	 * @fn	virtual void Game::updateGame();

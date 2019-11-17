@@ -2,6 +2,7 @@
 
 CameraComponent::CameraComponent(int updateOrder)
 {
+	initialize();
 }
 
 void CameraComponent::initialize()
@@ -12,6 +13,16 @@ void CameraComponent::initialize()
 
 void CameraComponent::setViewingTransformation()
 {
+	mat4 projMatrix = glm::inverse(getOwningGameObject()->sceneNode.getTransformation(WORLD));
+
+	mat4 viewMatrix = glm::lookAt(getOwningGameObject()->sceneNode.getPosition(WORLD),
+								  getOwningGameObject()->sceneNode.getFowardDirection(WORLD),
+								  getOwningGameObject()->sceneNode.getUpDirection(WORLD));
+
+	SharedProjectionAndViewing::setProjectionMatrix(projMatrix);
+	SharedProjectionAndViewing::setViewMatrix(viewMatrix);
+
+	glViewport(0, 0, getOwningGameObject()->getOwningGame()->getWindowWidth(), getOwningGameObject()->getOwningGame()->getWindowHeight());
 }
 
 void CameraComponent::setViewPort(GLfloat xLowerLeft, GLfloat yLowerLeft, GLfloat viewPortWidth, GLfloat viewPortHeight)
@@ -19,7 +30,7 @@ void CameraComponent::setViewPort(GLfloat xLowerLeft, GLfloat yLowerLeft, GLfloa
 	this->xLowerLeft = xLowerLeft;
 	this->yLowerLeft = yLowerLeft;
 	this->viewPortWidth = viewPortWidth;
-	this->viewPortHeight = this->viewPortHeight;
+	this->viewPortHeight = viewPortHeight;
 }
 
 void CameraComponent::setDepth(int depth)

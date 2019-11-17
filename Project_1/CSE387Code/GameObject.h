@@ -20,6 +20,17 @@ class GameObject
 public:
 
 	/**
+	 * @fn	Game* getOwningGame()
+	 *
+	 * @brief	Gets a reference to the game that this gameObject
+	 * 			is a part of.
+	 *
+	 * @returns	Null if it fails, else the owning game.
+	 */
+	class Game* getOwningGame() { return this->owningGame; }
+
+
+	/**
 	 * @fn	GameObject::GameObject(class Game * game);
 	 *
 	 * @brief	Constructor
@@ -115,6 +126,12 @@ public:
 	 * @param	state	The state to which the object is being set
 	 */
 	void setState(STATE state);
+
+	void addChild(GameObject* child);
+
+	void removeChild(GameObject* child);
+
+	void removeAndDeleteChild(GameObject* child);
 
 	/**
 	 * @fn	string getName()

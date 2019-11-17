@@ -86,9 +86,6 @@
     <ClInclude Include="SoundSourceComponent.h">
       <Filter>Sound</Filter>
     </ClInclude>
-    <ClInclude Include="KinematicsComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="SceneNode.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -104,9 +101,6 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BoxMeshComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
     <ClInclude Include="CameraComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
@@ -114,13 +108,7 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="RigidBodyComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="WaypointComponent.h">
-      <Filter>Components</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -181,28 +169,16 @@
     <ClCompile Include="SoundSourceComponent.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
-    <ClCompile Include="KinematicsComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="PhysicsEngine.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SceneNode.cpp">
       <Filter>Components</Filter>
     </ClCompile>
     <ClCompile Include="RigidBodyComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="BoxMeshComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsEngine.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="WaypointComponent.cpp">
-      <Filter>Components</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

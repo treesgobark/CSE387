@@ -77,6 +77,8 @@ public:
 	 */
 	virtual bool isMesh() { return false; }
 
+	GameObject* getOwningGameObject() { return owningGameObject; }
+
 
 	/** @brief	friend declaration  
 	 * Gives the GameObject class access to protected and private members
