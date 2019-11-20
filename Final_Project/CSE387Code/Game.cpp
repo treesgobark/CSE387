@@ -20,6 +20,7 @@
 #include "BoxMeshComponent.h"
 
 #include "WaypointComponent.h"
+#include "SteeringComponent.h"
 
 GameObject* emptyGameObject;
 GameObject* emptyGameObject2;
@@ -224,16 +225,17 @@ bool Game::initializeGraphics()
 
 	 GameObject* emptyGameObject = new GameObject(this);
 	 jetGameObject->addChild(emptyGameObject);
-	 jetGameObject->sceneNode.setScale(vec3(5.0, 5.0, 5.0));
-	 jetGameObject->sceneNode.setApplyScaleToChildren(true);
+	 //jetGameObject->sceneNode.setScale(vec3(5.0, 5.0, 5.0));
+	 //jetGameObject->sceneNode.setApplyScaleToChildren(true);
 	 ModelMeshComponent* jet = new ModelMeshComponent("Assets/jet_models/F-15C_Eagle.obj", shaderProgram);
 	 emptyGameObject->addComponent(jet);
 	 rg = new RigidBodyComponent(jet, KINEMATIC_MOVING);
 	 emptyGameObject->addComponent(rg);
 	 
 	 std::vector<vec3> waypoints = { vec3(0.0f, 0.0f, 0.0f),vec3(40.0f, 0.0f, -40.0f), vec3(-40.0f, 0.0f, -40.0f) };
-	 WaypointComponent * wpc = new WaypointComponent(waypoints);
-	 jetGameObject->addComponent(wpc);
+	 WaypointComponent* wpc = new WaypointComponent(waypoints);
+	 SteeringComponent* sc = new SteeringComponent(waypoints);
+	 jetGameObject->addComponent(sc);
 
 	 for (int i = 0; i < 10; i++) {
 
@@ -259,13 +261,21 @@ bool Game::initializeGraphics()
 	 boxGameObject->addComponent(platform);
 	 boxGameObject->addComponent(new RigidBodyComponent(platform, KINEMATIC_STATIONARY));
 
-	 GameObject * cameraGameObject = new GameObject(this);
+	 GameObject* cameraGameObject = new GameObject(this);
 	 this->addChild(cameraGameObject);
 	 cameraGameObject->sceneNode.setPosition(vec3(0.0f, 5.0f, 20.0f), WORLD);
 
-	 CameraComponent* camera = new CameraComponent();
-	 camera->setViewPort(0.0, 0.0, 1.0, 1.0); // full screen
-	 cameraGameObject->addComponent(camera);
+	 GameObject* jetCameraGameObject = new GameObject(this);
+	 emptyGameObject->addChild(jetCameraGameObject);
+	 jetCameraGameObject->sceneNode.setPosition(vec3(0.0f, 5.0f, 20.0f), WORLD);
+
+	 CameraComponent* camera1 = new CameraComponent();
+	 camera1->setViewPort(0.0, 0.0, 1.0, 0.5); // full screen
+	 cameraGameObject->addComponent(camera1);
+	 
+	 CameraComponent* camera2 = new CameraComponent();
+	 camera2->setViewPort(0.0, 0.5, 1.0, 1.0); // full screen
+	 jetCameraGameObject->addComponent(camera2);
 
 	 //GameObject* cameraGameObject2 = new GameObject(this);
 
