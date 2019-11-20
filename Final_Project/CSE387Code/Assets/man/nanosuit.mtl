@@ -1,0 +1,97 @@
+# Blender MTL File: 'nanosuit.blend'
+# Material Count: 6
+
+# new material called "Arm" 
+newmtl Arm
+Ns 96.078431 					# specular exponent
+Ka 0.000000 0.000000 0.000000	# ambient color
+Kd 0.640000 0.640000 0.640000	# diffuse color
+Ks 0.500000 0.500000 0.500000	# specular color
+Ni 1.000000						# "optical density" - index of refraction
+d 1.000000						# "Dissolved" indicates transparency (could be 'Tr' Tr = 1 - d)
+illum 2							# illumination model
+# Texture names may include a path. Make sure they are relative!
+# diffuse texture map 
+map_Kd arm_dif.png			
+# normal map (may have to be changed from "map_bump")	
+map_Kn arm_showroom_ddn.png
+# specular texture map
+map_Ks arm_showroom_spec.png
+
+
+newmtl Body
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd body_dif.png
+map_Kn body_showroom_ddn.png
+map_Ks body_showroom_spec.png
+
+
+newmtl Glass
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd glass_dif.png
+map_Kn glass_ddn.png
+
+
+newmtl Hand
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd hand_dif.png
+map_Kn hand_showroom_ddn.png
+map_Ks hand_showroom_spec.png
+
+
+newmtl Helmet
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd helmet_diff.png
+map_Kn helmet_showroom_ddn.png
+map_Ks helmet_showroom_spec.png
+
+
+newmtl Leg
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd leg_dif.png
+map_Kn leg_showroom_ddn.png
+map_Ks leg_showroom_spec.png
+
+# Illumination Models
+# 0. Color on and Ambient off
+# 1. Color on and Ambient on
+# 2. Highlight on
+# 3. Reflection on and Ray trace on
+# 4. Transparency: Glass on, Reflection: Ray trace on
+# 5. Reflection: Fresnel on and Ray trace on
+# 6. Transparency: Refraction on, Reflection: Fresnel off and Ray trace on
+# 7. Transparency: Refraction on, Reflection: Fresnel on and Ray trace on
+# 8. Reflection on and Ray trace off
+# 9. Transparency: Glass on, Reflection: Ray trace off
+# 10. Casts shadows onto invisible surfaces
+
