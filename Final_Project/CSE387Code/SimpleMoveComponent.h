@@ -21,8 +21,6 @@ protected:
 
 	vec3 moveVector = ZERO_V3;
 
-	float roarTimer = 0;
-
 	float speed = 1.0;
 
 	float rotationDegrees = 0.0f;

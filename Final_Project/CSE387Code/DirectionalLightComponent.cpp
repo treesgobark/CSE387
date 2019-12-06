@@ -8,5 +8,5 @@ DirectionalLightComponent::DirectionalLightComponent(lightSource id, bool enable
 
 void DirectionalLightComponent::update(float deltaTime)
 {
-	SharedGeneralLighting::setPositionOrDirection(id, vec4(owningGameObject->sceneNode.getFowardDirection(), 0.0f));
+	SharedGeneralLighting::setPositionOrDirection(id, vec4(owningGameObject->sceneNode.getFowardDirection(WORLD), 0.0f));
 }

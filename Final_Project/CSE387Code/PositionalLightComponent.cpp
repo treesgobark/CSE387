@@ -8,5 +8,5 @@ PositionalLightComponent::PositionalLightComponent(lightSource id, bool enabled)
 
 void PositionalLightComponent::update(float deltaTime)
 {
-	SharedGeneralLighting::setPositionOrDirection(id, vec4(owningGameObject->sceneNode.getFowardDirection(), 1.0f));
+	SharedGeneralLighting::setPositionOrDirection(id, vec4(owningGameObject->sceneNode.getPosition(WORLD), 1.0f));
 }

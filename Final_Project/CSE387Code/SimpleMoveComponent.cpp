@@ -11,15 +11,13 @@ SimpleMoveComponent::SimpleMoveComponent()
 
 void SimpleMoveComponent::update(float deltaTime)
 {
-	//mat4 localTrans = this->owningGameObject->sceneNode.getTransformation(WORLD);
+	mat4 localTrans = this->owningGameObject->sceneNode.getTransformation(WORLD);
 
-	//localTrans = localTrans *
-	//	glm::translate(moveVector * deltaTime * speed) *
-	//	glm::rotate(glm::radians(rotationDegrees), UNIT_Y_V3);
-	//
-	//this->owningGameObject->sceneNode.setTransform(localTrans, WORLD);
-
-	//roarTimer += deltaTime;
+	localTrans = localTrans *
+		glm::translate(moveVector * deltaTime * speed) *
+		glm::rotate(glm::radians(rotationDegrees), UNIT_Y_V3);
+	
+	this->owningGameObject->sceneNode.setTransform(localTrans, WORLD);
 }
 
 
@@ -76,9 +74,5 @@ void SimpleMoveComponent::processInput()
 
 void SimpleMoveComponent::CollisionEnter(const RigidBodyComponent* collisionData)
 {
-
-	cout << "BANG!!" << endl;
-
-
 
 }

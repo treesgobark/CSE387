@@ -229,17 +229,20 @@ bool Game::initializeGraphics()
 	 DirectionalLightComponent* dLightComponent = new DirectionalLightComponent(GL_LIGHT_ZERO, true);
 	 directionalLightGameObject->sceneNode.rotateTo(vec3(1.0, 1.0, 1.0), WORLD);
 	 dLightComponent->setAmbientColor(vec4(0.1f, 0.1f, 0.1f, 1.0f));
-	 dLightComponent->setDiffuseColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
-	 dLightComponent->setSpecularColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 dLightComponent->setDiffuseColor(vec4(0.2f, 0.2f, 0.8f, 1.0f));
+	 dLightComponent->setSpecularColor(vec4(0.2f, 0.2f, 0.8f, 1.0f));
+
 	 directionalLightGameObject->addComponent(dLightComponent);
+	 directionalLightGameObject->addComponent(new SimpleMoveComponent());
 
 	 GameObject* positionalLightGameObject = new GameObject(this);
 	 this->addChild(positionalLightGameObject);
-	 PositionalLightComponent* pLightComponent = new PositionalLightComponent(GL_LIGHT_ONE, false);
+	 PositionalLightComponent* pLightComponent = new PositionalLightComponent(GL_LIGHT_ONE, true);
 	 positionalLightGameObject->sceneNode.setPosition(vec3(10.0f, 10.0f, -20.0f), WORLD);
 	 pLightComponent->setAmbientColor(vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	 pLightComponent->setDiffuseColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	 pLightComponent->setSpecularColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
 	 positionalLightGameObject->addComponent(pLightComponent);
 
 	 GameObject* jetGameObject = new GameObject(this);
@@ -260,7 +263,7 @@ bool Game::initializeGraphics()
 	 SteeringComponent* sc = new SteeringComponent(waypoints);
 	 jetGameObject->addComponent(sc);
 
-	 for (int i = 0; i < 10; i++) {
+	 for (int i = 0; i < 5; i++) {
 
 		 GameObject* dinoGameObject2 = new GameObject(this);
 		 this->addChild(dinoGameObject2);
@@ -280,7 +283,7 @@ bool Game::initializeGraphics()
 	 GameObject* boxGameObject = new GameObject(this);
 	 this->addChild(boxGameObject);
 	 boxGameObject->sceneNode.setPosition(vec3(0.0f, -3.0f, 0.0f), WORLD);
-	 BoxMeshComponent* platform = new BoxMeshComponent(new Material(), 10.0f, 0.1f, 10.0f, shaderProgram);
+	 BoxMeshComponent* platform = new BoxMeshComponent(new Material(), 30.0f, 0.1f, 30.0f, shaderProgram);
 	 boxGameObject->addComponent(platform);
 	 boxGameObject->addComponent(new RigidBodyComponent(platform, KINEMATIC_STATIONARY));
 
