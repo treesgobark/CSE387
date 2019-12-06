@@ -4,10 +4,10 @@
 
 #define VERBOSE false
 
-RigidBodyComponent::RigidBodyComponent(MeshComponent* meshComponent, DynamicsState state, int updateOrder)
+RigidBodyComponent::RigidBodyComponent(MeshComponent* meshComponent, DynamicsState state, int updateOrder, btScalar mass)
 	: Component( updateOrder), meshComponent(meshComponent), rigidbodyDynamics(state)
 {
-
+	this->mass = mass;
 }
 
 void RigidBodyComponent::initialize()
@@ -25,7 +25,6 @@ void RigidBodyComponent::initialize()
 	if (this->rigidbodyDynamics == DYNAMIC) {
 
 		// Object staring with no inertia.
-		btScalar mass = 1;
 		btVector3 inertia(0, 0, 0);
 		bulletCollisionShape->calculateLocalInertia(mass, inertia);
 

@@ -249,7 +249,7 @@ bool Game::initializeGraphics()
 		 emptyGameObject2->sceneNode.setRotation(glm::rotate(PI, UNIT_Y_V3), LOCAL);
 		 ModelMeshComponent* dino2 = new ModelMeshComponent("Assets/Dinosaur/Trex.obj", shaderProgram);
 		 emptyGameObject2->addComponent(dino2);
-		 emptyGameObject2->addComponent(new RigidBodyComponent(dino2, DYNAMIC));
+		 emptyGameObject2->addComponent(new RigidBodyComponent(dino2, DYNAMIC, 100, 100*pow(2, -i)));
 	 }
 
 

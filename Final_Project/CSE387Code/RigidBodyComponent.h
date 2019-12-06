@@ -20,7 +20,7 @@ class RigidBodyComponent : 	public Component, public btMotionState
 	 * @param 		  	state		 	(Optional) The state.
 	 * @param 		  	updateOrder  	(Optional) The update order.
 	 */
-	RigidBodyComponent(class MeshComponent* meshComponent, DynamicsState state = DYNAMIC, int updateOrder = 100);
+	RigidBodyComponent(class MeshComponent* meshComponent, DynamicsState state = DYNAMIC, int updateOrder = 100, btScalar mass = 1);
 
 	/**
 	 * @fn	virtual RigidBodyComponent::~RigidBodyComponent( );
@@ -129,5 +129,7 @@ class RigidBodyComponent : 	public Component, public btMotionState
 
 	/** @brief	Reference to the mesh component with the collision shape for this rigid body. */
 	MeshComponent* meshComponent;
+
+	btScalar mass;
 };
 
