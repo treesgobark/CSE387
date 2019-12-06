@@ -71,11 +71,15 @@ layout(location = 101) uniform sampler2D specularSampler;
 in vec3 vertexWorldPosition;
 in vec3 vertexWorldNormal;
 in vec2 TexCoord;
+in vec4 viewSpace;
 
 out vec4 fragmentColor;
 
 vec3 shadingCaculation(GeneralLight light, Material object);
 vec3 fragmentWorldNormal;
+
+const vec3 fogColor = vec3(0.2, 0.5, 0.8);
+const float fogDensity = 0.03;
 
 void main()
 {
@@ -113,6 +117,15 @@ void main()
 
 		fragmentColor = texture(diffuseSampler, TexCoord.st);
 	}
+
+
+	// fog calculations
+	float dist = length(viewSpace);
+	float distFactor = 1.0 / exp((dist * fogDensity) * (dist * fogDensity));
+	distFactor = clamp(distFactor, 0.0, 1.0);
+
+	fragmentColor = mix(vec4(fogColor, 1.0), fragmentColor, distFactor);
+
 
 } // main
 

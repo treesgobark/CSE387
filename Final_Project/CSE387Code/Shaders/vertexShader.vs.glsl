@@ -15,6 +15,7 @@ layout(shared) uniform transformBlock
 out vec3 vertexWorldPosition;
 out vec3 vertexWorldNormal;
 out vec2 TexCoord;
+out vec4 viewSpace;
 
 layout (location = 0) in vec3 vertexPosition; 
 layout (location = 1) in vec3 vertexNormal;
@@ -25,8 +26,10 @@ void main()
 	// Make a vec4 version of the vertexPosition in object coords
 	vec4 vPos = vec4(vertexPosition, 1.0f);
 
+	viewSpace = viewingMatrix * modelMatrix * vPos;
+
     // Transform the position of the vertext to clip coordinates
-    gl_Position = projectionMatrix * viewingMatrix * modelMatrix * vPos;
+    gl_Position = projectionMatrix * viewSpace;
 
 	// Transform the position of the vertex to world coords for lighting
 	vertexWorldPosition = vec3(modelMatrix * vPos);
