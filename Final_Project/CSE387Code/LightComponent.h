@@ -63,6 +63,8 @@ public:
 	 */
 	void setSpecularColor(vec4 newSpec);
 
+	static std::vector<LightComponent*> activeLights;
+
 protected:
 
 

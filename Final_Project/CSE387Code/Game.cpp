@@ -22,6 +22,11 @@
 #include "WaypointComponent.h"
 #include "SteeringComponent.h"
 
+#include "AmbientLightComponent.h"
+#include "DirectionalLightComponent.h"
+#include "PositionalLightComponent.h"
+#include "SpotLightComponent.h"
+
 GameObject* emptyGameObject;
 GameObject* emptyGameObject2;
 GameObject* dinoGameObject;
@@ -206,7 +211,7 @@ bool Game::initializeGraphics()
 	 SharedProjectionAndViewing::setUniformBlockForShader(shaderProgram);
 	 SharedMaterialProperties::setUniformBlockForShader(shaderProgram);
 	 SharedGeneralLighting::setUniformBlockForShader(shaderProgram);
-
+/*
 	 SharedGeneralLighting::setAmbientColor(GL_LIGHT_ZERO, vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	 SharedGeneralLighting::setDiffuseColor(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_ZERO, vec4(1.0f, 1.0f, 1.0f, 1.0f));
@@ -218,6 +223,24 @@ bool Game::initializeGraphics()
 	 SharedGeneralLighting::setSpecularColor(GL_LIGHT_ONE, vec4(1.0f, 1.0f, 1.0f, 1.0f));
 	 SharedGeneralLighting::setPositionOrDirection(GL_LIGHT_ONE, vec4(10.0f, 10.0f, -20.0f, 1.0f));
 	 SharedGeneralLighting::setEnabled(GL_LIGHT_ONE, false);
+*/
+	 GameObject* directionalLightGameObject = new GameObject(this);
+	 this->addChild(directionalLightGameObject);
+	 DirectionalLightComponent* dLightComponent = new DirectionalLightComponent(GL_LIGHT_ZERO, true);
+	 directionalLightGameObject->sceneNode.rotateTo(vec3(1.0, 1.0, 1.0), WORLD);
+	 dLightComponent->setAmbientColor(vec4(0.1f, 0.1f, 0.1f, 1.0f));
+	 dLightComponent->setDiffuseColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 dLightComponent->setSpecularColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 directionalLightGameObject->addComponent(dLightComponent);
+
+	 GameObject* positionalLightGameObject = new GameObject(this);
+	 this->addChild(positionalLightGameObject);
+	 PositionalLightComponent* pLightComponent = new PositionalLightComponent(GL_LIGHT_ONE, false);
+	 positionalLightGameObject->sceneNode.setPosition(vec3(10.0f, 10.0f, -20.0f), WORLD);
+	 pLightComponent->setAmbientColor(vec4(0.1f, 0.1f, 0.1f, 1.0f));
+	 pLightComponent->setDiffuseColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 pLightComponent->setSpecularColor(vec4(1.0f, 1.0f, 1.0f, 1.0f));
+	 positionalLightGameObject->addComponent(pLightComponent);
 
 	 GameObject* jetGameObject = new GameObject(this);
 	 this->addChild(jetGameObject);

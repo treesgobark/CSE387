@@ -48,15 +48,6 @@ void SimpleMoveComponent::processInput()
 		this->moveVector = owningGameObject->sceneNode.getFowardDirection(LOCAL);
 	}
 
-	int leftButtonState = glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_LEFT);
-
-
-	if (leftButtonState == GLFW_PRESS && roarTimer > 1.0f)
-	{
-		cout << "Roar!" << endl;
-		roarTimer = 0;
-	}
-
 	if (glfwGetKey(win, GLFW_KEY_UP) == GLFW_PRESS) {
 
 		this->speed += 0.1f;

@@ -158,11 +158,13 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <None Include="Shaders\vertexShader.vs.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AmbientLightComponent.h" />
     <ClInclude Include="BuildShaderProgram.h" />
     <ClInclude Include="CameraComponent.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="BoxMeshComponent.h" />
+    <ClInclude Include="DirectionalLightComponent.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="LightComponent.h" />
@@ -170,6 +172,7 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClInclude Include="ModelMeshComponent.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="PhysicsEngine.h" />
+    <ClInclude Include="PositionalLightComponent.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="SceneNode.h" />
     <ClInclude Include="SharedGeneralLighting.h" />
@@ -183,16 +186,19 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClInclude Include="SoundReverbZoneComponent.h" />
     <ClInclude Include="SoundSourceComponent.h" />
     <ClInclude Include="SphereMeshComponent.h" />
+    <ClInclude Include="SpotLightComponent.h" />
     <ClInclude Include="SteeringComponent.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="WaypointComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AmbientLightComponent.cpp" />
     <ClCompile Include="BuildShaderProgram.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="BoxMeshComponent.cpp" />
+    <ClCompile Include="DirectionalLightComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="gl3w.c" />
@@ -202,6 +208,7 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClCompile Include="ModelMeshComponent.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="PhysicsEngine.cpp" />
+    <ClCompile Include="PositionalLightComponent.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SceneNode.cpp" />
     <ClCompile Include="SharedGeneralLighting.cpp" />
@@ -215,6 +222,7 @@ copy "$(SolutionDir)"\External\FMOD\lib\"*.dll" "$(SolutionDir)"\x64\Release\
     <ClCompile Include="SoundReverbZoneComponent.cpp" />
     <ClCompile Include="SoundSourceComponent.cpp" />
     <ClCompile Include="SphereMeshComponent.cpp" />
+    <ClCompile Include="SpotLightComponent.cpp" />
     <ClCompile Include="SteeringComponent.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="WaypointComponent.cpp" />
